@@ -1,5 +1,5 @@
 plugins {
-    id 'kotlin-multiplatform' version '1.3.11'
+    id 'kotlin-multiplatform' version '1.3.20'
 }
 
 repositories {
@@ -12,10 +12,16 @@ kotlin {
         // For Linux, preset should be changed to e.g. presets.linuxX64
         // For MacOS, preset should be changed to e.g. presets.macosX64
         fromPreset(presets.mingwX64, 'Gameboy')
-
         configure([Gameboy]) {
             // Comment to generate Kotlin/Native library (KLIB) instead of executable file:
             compilations.main.outputKinds = [EXECUTABLE,DYNAMIC]
+            compilations.main.cinterops {
+                libretro {
+                    defFile project.file("libretro.def")
+                    packageName 'libretro'
+                    compilerOpts '-I' + new File(".").absolutePath
+                }
+            }
             // Change to specify fully qualified name of your application's entry point:
             compilations.main.entryPoint 'com.teddyheinen.gameboy.main'
         }

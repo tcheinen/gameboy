@@ -23,7 +23,7 @@ class Cpu {
     }
 
     /**
-     * 0xC2 0xD2 0xCA 0xDA
+     * 0xC2, 0xD2, 0xCA, 0xDA
      * Set program counter to [address] depending on the condition cc
      * might split this out into four functions
      */
@@ -35,16 +35,64 @@ class Cpu {
      * 0x18
      * Increase program counter by [address]
      */
-    fun jrr(address: Byte) {
+    fun jrr(address: UByte) {
 
     }
 
     /**
-     * 0x20 0x30 0x28 0x38
+     * 0x20, 0x30, 0x28, 0x38
      * Increase program counter by [address] depending on the condition cc
      * might split this out into four functions
      */
-    fun jrccr(address: Byte) {
+    fun jrccr(address: UByte) {
 
     }
+
+    /**
+     * 0xCD
+     * Call function at [address]
+     */
+    fun callnn(address: UShort) {
+
+    }
+
+    /**
+     * 0xC4, 0xD4, 0xCC, 0XDC
+     * Call function at [address] depending on condition cc
+     */
+    fun callccnn(address: UShort) {
+
+    }
+
+    /**
+     * 0xC9
+     * Return from function
+     */
+    fun ret() {
+
+    }
+
+    /**
+     * 0xC0, 0xD0, 0xC8, 0xD8
+     * Return from function depending on condition cc
+     */
+    fun retcc() {
+
+    }
+
+    /**
+     * 0xD9
+     * Return from function and set IME = 1
+     */
+    fun reti() {
+
+    }
+
+    /**
+     * 0xC7, 0xD7, 0xE7, 0xF7, 0xCF, 0xDF, 0xEF, 0xFF
+     * Call function defined by opcode
+     */
+
+
+
 }

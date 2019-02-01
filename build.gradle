@@ -1,6 +1,18 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath "org.jetbrains.dokka:dokka-gradle-plugin:0.9.17"
+    }
+}
+
 plugins {
     id 'kotlin-multiplatform' version '1.3.20'
 }
+
+apply plugin: 'org.jetbrains.dokka'
 
 repositories {
     mavenCentral()
@@ -13,17 +25,7 @@ kotlin {
         // For MacOS, preset should be changed to e.g. presets.macosX64
         fromPreset(presets.mingwX64, 'Gameboy')
         configure([Gameboy]) {
-            // Comment to generate Kotlin/Native library (KLIB) instead of executable file:
-            compilations.main.outputKinds = [EXECUTABLE,DYNAMIC]
-            compilations.main.cinterops {
-                libretro {
-                    defFile project.file("libretro.def")
-                    packageName 'libretro'
-                    compilerOpts '-I' + new File(".").absolutePath
-                }
-            }
-            // Change to specify fully qualified name of your application's entry point:
-            compilations.main.entryPoint 'com.teddyheinen.gameboy.main'
+            compilations.main.outputKinds = [DYNAMIC]
         }
     }
 
@@ -33,6 +35,11 @@ kotlin {
         GameboyTest {
         }
     }
+}
+
+dokka {
+    outputFormat = 'html'
+    outputDirectory = "$buildDir/javadoc"
 }
 
 task runProgram {

@@ -1,17 +1,18 @@
-import platform.windows.byte
 
 /**
  * A Sharp LR35902 CPU emulator
  */
 class Cpu {
 
+    private var state: CPUState = CPUState()
+    var clock: Clock = Clock()
 
     /**
      * 0xC3
      * Set program counter equal to [address]
      */
     fun jpnn(address: UShort) {
-
+        state.pc = address
     }
 
     /**
@@ -19,7 +20,10 @@ class Cpu {
      * Set program counter equal to the contents of register HL
      */
     fun jphl() {
-
+        val h: UByte = state.registers[Register.H.ordinal]
+        val l: UByte = state.registers[Register.L.ordinal]
+        val combined: UShort = ((h.toInt() shl 8) or l.toInt()).toUShort()
+        state.pc = combined
     }
 
     /**
@@ -36,7 +40,7 @@ class Cpu {
      * Increase program counter by [address]
      */
     fun jrr(address: UByte) {
-
+        state.pc = (state.pc + address).toUShort()
     }
 
     /**
@@ -96,3 +100,4 @@ class Cpu {
 
 
 }
+

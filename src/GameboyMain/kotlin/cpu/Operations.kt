@@ -140,3 +140,19 @@ fun ccf() {
 fun scf() {
 
 }
+
+/**
+ * Name: LD r16, u16
+ * Description: Set a 16 bit register given a 16 bit value
+ */
+fun ld_r16_u16(cpu: Cpu, reg: Register, value: UShort) {
+    when(reg) {
+        Register.SP -> cpu.state.reg.sp = value
+        Register.PC -> cpu.state.reg.pc = value
+        Register.AF -> cpu.state.reg.af = value
+        Register.BC -> cpu.state.reg.bc = value
+        Register.DE -> cpu.state.reg.de = value
+        Register.HL -> cpu.state.reg.hl = value
+        else -> 0u // should never happen
+    }
+}

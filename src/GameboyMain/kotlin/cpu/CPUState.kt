@@ -14,6 +14,24 @@ data class CPUState(val reg: Registers = Registers(),
 data class Clock(var m: UShort = 0u,
                  var t: UShort = 0u)
 
+
+enum class Register {
+    A,
+    B,
+    C,
+    D,
+    E,
+    H,
+    L,
+    F,
+    SP,
+    PC,
+    AF,
+    BC,
+    DE,
+    HL
+}
+
 /**
  * Stores the CPU Registers with convenience methods for accessing them as 16 bit
  */
@@ -26,7 +44,7 @@ class Registers(var a: UByte = 0u,
                 var h: UByte = 0u,
                 var l: UByte = 0u,
                 var f: BitSet = BitSet(8),
-                var sf: UShort = 0u,
+                var sp: UShort = 0u,
                 var pc: UShort = 0u) {
     companion object {
         const val ZERO_FLAG: Int = 7
@@ -77,4 +95,36 @@ class Registers(var a: UByte = 0u,
     var carry: Boolean
         get() = f[CARRY_FLAG]
         set(num) = f.set(CARRY_FLAG, num)
+
+    /**
+     * Return 8-bit register [reg] by enum [Register]
+     * This only exists if I want to get or set a register by enum
+     */
+    fun getr8(reg: Register): UByte {
+        return when(reg) {
+            Register.A -> a
+            Register.B -> b
+            Register.C -> c
+            Register.D -> d
+            Register.E -> e
+            Register.H -> h
+            Register.L -> l
+            else -> 0u
+        }
+    }
+    /**
+     * Return 16-bit register [reg] by enum [Register]
+     * This only exists if I want to get or set a register by enum
+     */
+    fun getr16(reg: Register): UShort {
+        return when(reg) {
+            Register.SP -> sp
+            Register.PC -> pc
+            Register.AF -> af
+            Register.BC -> bc
+            Register.DE -> de
+            Register.HL -> hl
+            else -> 0u
+        }
+    }
 }

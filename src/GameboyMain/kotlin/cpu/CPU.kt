@@ -4,10 +4,9 @@ package cpu
  */
 class Cpu {
 
-    private var state: CPUState = CPUState()
+    var state: CPUState = CPUState()
     var clock: Clock = Clock()
 
 
 
 }
-

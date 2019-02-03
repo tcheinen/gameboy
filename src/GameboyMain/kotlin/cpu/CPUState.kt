@@ -1,3 +1,5 @@
+package cpu
+
 data class CPUState(val registers: UByteArray = UByteArray(8),
                     var pc: UShort = 0u,
                     var sp: UShort = 0u,

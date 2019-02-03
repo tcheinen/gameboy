@@ -10,22 +10,22 @@ class Opcodes() {
     }
 
     init {
-        op[0x0] = Opcode("NOP", 1, 4) {}
-        op[0x1] = Opcode("LD BC,u16", 3, 12) {}
-        op[0x2] = Opcode("LD (BC),A", 1, 8) {}
-        op[0x3] = Opcode("INC BC", 1, 8) {}
-        op[0x4] = Opcode("INC B", 1, 4) {}
-        op[0x5] = Opcode("DEC B", 1, 4) {}
-        op[0x6] = Opcode("LD B,u8", 2, 8) {}
-        op[0x7] = Opcode("RLCA", 1, 4) {}
-        op[0x8] = Opcode("LD (u16),SP", 3, 20) {}
-        op[0x9] = Opcode("ADD HL,BC", 1, 8) {}
-        op[0xA] = Opcode("LD A,(BC)", 1, 8) {}
-        op[0xB] = Opcode("DEC BC", 1, 8) {}
-        op[0xC] = Opcode("INC C", 1, 4) {}
-        op[0xD] = Opcode("DEC C", 1, 4) {}
-        op[0xE] = Opcode("LD C,u8", 2, 8) {}
-        op[0xF] = Opcode("RRCA", 1, 4) {}
+        op[0x00] = Opcode("NOP", 1, 4) {}
+        op[0x01] = Opcode("LD BC,u16", 3, 12) {}
+        op[0x02] = Opcode("LD (BC),A", 1, 8) {}
+        op[0x03] = Opcode("INC BC", 1, 8) {}
+        op[0x04] = Opcode("INC B", 1, 4) {}
+        op[0x05] = Opcode("DEC B", 1, 4) {}
+        op[0x06] = Opcode("LD B,u8", 2, 8) {}
+        op[0x07] = Opcode("RLCA", 1, 4) {}
+        op[0x08] = Opcode("LD (u16),SP", 3, 20) {}
+        op[0x09] = Opcode("ADD HL,BC", 1, 8) {}
+        op[0x0A] = Opcode("LD A,(BC)", 1, 8) {}
+        op[0x0B] = Opcode("DEC BC", 1, 8) {}
+        op[0x0C] = Opcode("INC C", 1, 4) {}
+        op[0x0D] = Opcode("DEC C", 1, 4) {}
+        op[0x0E] = Opcode("LD C,u8", 2, 8) {}
+        op[0x0F] = Opcode("RRCA", 1, 4) {}
 
         op[0x10] = Opcode("STOP", 2, 4) {}
         op[0x11] = Opcode("LD DE,u16", 3, 12) {}

@@ -1,14 +1,14 @@
 package cpu
 
 
-private var state: CPUState = CPUState()
+private var registers: Registers = Registers()
 
 /**
  * 0xC3
  * Set program counter equal to [address]
  */
 fun jpnn(address: UShort) {
-    state.pc = address
+    registers.PC = address
 }
 
 /**
@@ -16,10 +16,8 @@ fun jpnn(address: UShort) {
  * Set program counter equal to the contents of register HL
  */
 fun jphl() {
-    val h: UByte = state.registers[Register.H.ordinal]
-    val l: UByte = state.registers[Register.L.ordinal]
-    val combined: UShort = ((h.toInt() shl 8) or l.toInt()).toUShort()
-    state.pc = combined
+
+    registers.PC = registers.HL
 }
 
 /**
@@ -36,7 +34,7 @@ fun jpccnn(address: UShort) {
  * Increase program counter by [address]
  */
 fun jrr(address: UByte) {
-    state.pc = (state.pc + address).toUShort()
+    registers.PC = (registers.PC + address).toUShort()
 }
 
 /**

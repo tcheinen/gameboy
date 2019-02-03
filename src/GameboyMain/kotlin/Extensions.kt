@@ -9,3 +9,21 @@ val UShort.high: UByte get() = (this shr 8).toUByte()
 val UShort.low: UByte get() = (this and 0xFFu).toUByte()
 
 
+// TODO make sure this works
+val BitSet.byte: UByte get() {
+    var out: UByte = 0u
+    for(i in this.size..0) {
+        out shl 1
+        if(this[i]) out++
+    }
+    return out
+}
+
+// TODO make sure this works
+val UByte.bitset: BitSet get() {
+    val out = BitSet(8)
+    toString(2).forEachIndexed { i, e ->
+        if(e == '1') out.set(7-i,true)
+    }
+    return out
+}

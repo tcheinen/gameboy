@@ -3,7 +3,7 @@ package cpu
 data class Opcode(val name: String, val length: Int, val time: Int, val operation: () -> Unit)
 
 
-class Opcodes() {
+class Opcodes {
 
     companion object {
         val op: Array<Opcode> = arrayOf()

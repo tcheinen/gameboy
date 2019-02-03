@@ -8,7 +8,7 @@ private var registers: Registers = Registers()
  * Set program counter equal to [address]
  */
 fun jpnn(address: UShort) {
-    registers.PC = address
+    registers.pc = address
 }
 
 /**
@@ -17,7 +17,7 @@ fun jpnn(address: UShort) {
  */
 fun jphl() {
 
-    registers.PC = registers.HL
+    registers.pc = registers.hl
 }
 
 /**
@@ -34,7 +34,7 @@ fun jpccnn(address: UShort) {
  * Increase program counter by [address]
  */
 fun jrr(address: UByte) {
-    registers.PC = (registers.PC + address).toUShort()
+    registers.pc = (registers.pc + address).toUShort()
 }
 
 /**

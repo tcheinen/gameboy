@@ -12,11 +12,11 @@ class Opcodes {
     init {
         op[0x00] = Opcode("NOP", 1, 4) {cpu: Cpu -> }
         op[0x01] = Opcode("LD BC,u16", 3, 12) {cpu: Cpu -> cpu.ld_r16_u16(Register.BC)}
-        op[0x02] = Opcode("LD (BC),A", 1, 8) {cpu: Cpu -> }
-        op[0x03] = Opcode("INC BC", 1, 8) {cpu: Cpu -> }
-        op[0x04] = Opcode("INC B", 1, 4) {cpu: Cpu -> }
-        op[0x05] = Opcode("DEC B", 1, 4) {cpu: Cpu -> }
-        op[0x06] = Opcode("LD B,u8", 2, 8) {cpu: Cpu -> }
+        op[0x02] = Opcode("LD (BC),A", 1, 8) {cpu: Cpu -> cpu.ld_r16_r8(Register.BC, Register.A)}
+        op[0x03] = Opcode("INC BC", 1, 8) {cpu: Cpu -> cpu.inc_r16(Register.BC) }
+        op[0x04] = Opcode("INC B", 1, 4) {cpu: Cpu -> cpu.inc_r8(Register.B) }
+        op[0x05] = Opcode("DEC B", 1, 4) {cpu: Cpu -> cpu.dec_r8(Register.B) }
+        op[0x06] = Opcode("LD B,u8", 2, 8) {cpu: Cpu -> cpu.ld_r8_u8(Register.B)}
         op[0x07] = Opcode("RLCA", 1, 4) {cpu: Cpu -> }
         op[0x08] = Opcode("LD (u16),SP", 3, 20) {cpu: Cpu -> }
         op[0x09] = Opcode("ADD HL,BC", 1, 8) {cpu: Cpu -> }

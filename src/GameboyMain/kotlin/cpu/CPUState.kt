@@ -113,6 +113,21 @@ class Registers(var a: UByte = 0u,
         }
     }
     /**
+     * Set 8-bit register [reg] to [value]
+     */
+    fun setr8(reg: Register, value: UByte) {
+        when(reg) {
+            Register.A -> a = value
+            Register.B -> b = value
+            Register.C -> c = value
+            Register.D -> d = value
+            Register.E -> e = value
+            Register.H -> h = value
+            Register.L -> l = value
+            else -> {}
+        }
+    }
+    /**
      * Return 16-bit register [reg] by enum [Register]
      * This only exists if I want to get or set a register by enum
      */
@@ -125,6 +140,21 @@ class Registers(var a: UByte = 0u,
             Register.DE -> de
             Register.HL -> hl
             else -> 0u
+        }
+    }
+
+    /**
+     * Set 16-bit register [reg] to [value]
+     */
+    fun setr16(reg: Register, value: UShort) {
+        when(reg) {
+            Register.SP -> sp = value
+            Register.PC -> pc = value
+            Register.AF -> af = value
+            Register.BC -> bc = value
+            Register.DE -> de = value
+            Register.HL -> hl = value
+            else -> {}
         }
     }
 }

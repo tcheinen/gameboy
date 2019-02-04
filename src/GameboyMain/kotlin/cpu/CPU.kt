@@ -15,11 +15,11 @@ class Cpu {
 
     /**
      * Name: LD r16, u16
-     * Description: Set a 16 bit register to two bytes read from the program coutner
+     * Description: Set a 16 bit register to two bytes read from memory at the program counter
      */
     fun ld_r16_u16(reg: Register) {
-        val value: UShort = 0u
-        when(reg) {
+        val value: UShort = readShort(state.reg.pc)
+        when (reg) {
             Register.SP -> state.reg.sp = value
             Register.PC -> state.reg.pc = value
             Register.AF -> state.reg.af = value
@@ -30,6 +30,78 @@ class Cpu {
         }
     }
 
+    /**
+     * Name: LD (r16), r8
+     * Description: Set the memory address stored in [reg16] to [reg8]
+     * Increment HL if [reg16] is HL and decrement HL if [reg16] is SP
+     */
+    fun ld_r16_r8(reg16: Register, reg8: Register) {
+        var address: UShort = when (reg16) {
+            Register.BC -> state.reg.bc
+            Register.DE -> state.reg.de
+            Register.HL -> {
+                state.reg.hl;
+                state.reg.hl++
+            }
+            Register.SP -> {
+                state.reg.hl;
+                state.reg.hl--
+            }
+            else -> 0u // should never happen
+        }
+        writeByte(address,  state.reg.getr8(reg8))
+    }
+
+    /**
+     * Name: INC r16
+     * Description: Increment 16-bit register [reg]
+     */
+    fun inc_r16(reg: Register) {
+        state.reg.setr16(reg, (state.reg.getr16(reg)+1u).toUShort())
+    }
+    /**
+     * Name: INC r8
+     * Description: Increment 16-bit register [reg]
+     */
+    fun inc_r8(reg: Register) {
+        val currentValue: UByte = state.reg.getr8(reg)
+        state.reg.addsub = false
+        state.reg.zero = (currentValue == (0xffu).toUByte())
+        state.reg.halfcarry = (((currentValue and 0xfu) + 1u) and 0x10u) == 0x10u
+        state.reg.setr8(reg, (state.reg.getr8(reg)+1u).toUByte())
+    }
+
+    /**
+     * Name: DEC r16
+     * Description: Decrement 16-bit register [reg]
+     */
+    fun dec_r16(reg: Register) {
+        state.reg.setr16(reg, (state.reg.getr16(reg)-1u).toUShort())
+    }
+    /**
+     * Name: DEC r8
+     * Description: Decrement 16-bit register [reg]
+     */
+    fun dec_r8(reg: Register) {
+        state.reg.setr8(reg, (state.reg.getr8(reg)-1u).toUByte())
+    }
+    /**
+     * Name: LD r8, u8
+     * Description: Set an 8 bit register to a bytes read from memory at the program counter
+     */
+    fun ld_r8_u8(reg: Register) {
+        val value: UByte = readByte(state.reg.pc)
+        when (reg) {
+            Register.A -> state.reg.a = value
+            Register.B -> state.reg.b = value
+            Register.C -> state.reg.c = value
+            Register.D -> state.reg.d = value
+            Register.E -> state.reg.e = value
+            Register.H -> state.reg.h = value
+            Register.L -> state.reg.l = value
+            else -> {} // should never happen
+        }
+    }
     /**
      * Increase the program counter by [num]
      */
@@ -100,6 +172,7 @@ class Cpu {
         writeByte(address, value.high)
         writeByte(address, value.low)
     }
+
     /**
      * Read 16-bit [value] from memory at address [address]
      */

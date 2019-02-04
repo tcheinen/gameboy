@@ -17,7 +17,7 @@ class Opcodes {
         op[0x04] = Opcode("INC B", 1, 4) {cpu: Cpu -> cpu.inc_r8(Register.B) }
         op[0x05] = Opcode("DEC B", 1, 4) {cpu: Cpu -> cpu.dec_r8(Register.B) }
         op[0x06] = Opcode("LD B,u8", 2, 8) {cpu: Cpu -> cpu.ld_r8_u8(Register.B)}
-        op[0x07] = Opcode("RLCA", 1, 4) {cpu: Cpu -> }
+        op[0x07] = Opcode("RLCA", 1, 4) {cpu: Cpu -> cpu.rlc(Register.A) }
         op[0x08] = Opcode("LD (u16),SP", 3, 20) {cpu: Cpu -> }
         op[0x09] = Opcode("ADD HL,BC", 1, 8) {cpu: Cpu -> }
         op[0x0A] = Opcode("LD A,(BC)", 1, 8) {cpu: Cpu -> }

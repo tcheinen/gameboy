@@ -3,10 +3,13 @@ package cpu
 import combine
 import high
 import low
+import shl
+import shr
 
 /**
  * A Sharp LR35902 CPU emulator
  */
+@ExperimentalUnsignedTypes
 class Cpu {
 
     var state: CPUState = CPUState()
@@ -26,7 +29,7 @@ class Cpu {
             Register.BC -> state.reg.bc = value
             Register.DE -> state.reg.de = value
             Register.HL -> state.reg.hl = value
-            else -> 0u // should never happen
+            else -> {} // should never happen
         }
     }
 
@@ -36,7 +39,7 @@ class Cpu {
      * Increment HL if [reg16] is HL and decrement HL if [reg16] is SP
      */
     fun ld_r16_r8(reg16: Register, reg8: Register) {
-        var address: UShort = when (reg16) {
+        val address: UShort = when (reg16) {
             Register.BC -> state.reg.bc
             Register.DE -> state.reg.de
             Register.HL -> {
@@ -102,6 +105,19 @@ class Cpu {
             else -> {} // should never happen
         }
     }
+
+    /**
+     * Name: RLC r8
+     * Description: Rotate Left Circular for register [reg]
+     * Sets [reg] to (A shl 1) or (A shr 7)
+     * If bit 7 is set, set carry.  Otherwise reset.  All other flags are reset
+     */
+    fun rlc(reg: Register) {
+        state.reg.f.clear()
+        state.reg.carry = state.reg.a >= 0x80u
+        state.reg.setr8(reg, (state.reg.getr8(reg) shl 1) or (state.reg.getr8(reg) shr 7))
+    }
+
     /**
      * Increase the program counter by [num]
      */

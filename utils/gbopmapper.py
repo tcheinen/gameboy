@@ -1,9 +1,39 @@
 # automation has saved my sanity, thanks izik1 for the documentation
 import requests
 import json
-r = requests.get("https://izik1.github.io/gbops/table/dmgops.json")
+import re
 
-json = r.json()
+ld_r16_u16 = re.compile("LD (..),u16$")
+inc_r16 = re.compile("INC (..)$")
+inc_r8 = re.compile("INC (.)$")
+dec_r16 = re.compile("DEC (..)$")
+dec_r8 = re.compile("DEC (.)$")
+
+def parseOp(op):
+    out = ""
+    if ld_r16_u16.match(op):
+        reg = ld_r16_u16.findall(op)[0]
+        out = "{cpu: Cpu -> cpu.ld_r16_u16(Register." + reg + ")}"
+    elif inc_r16.match(op):
+        reg = inc_r16.findall(op)[0]
+        out = "{cpu: Cpu -> cpu.inc_r16(Register." + reg + ")}"
+    elif inc_r8.match(op):
+        reg = inc_r8.findall(op)[0]
+        out = "{cpu: Cpu -> cpu.inc_r8(Register." + reg + ")}"
+    elif dec_r16.match(op):
+        reg = dec_r16.findall(op)[0]
+        out = "{cpu: Cpu -> cpu.dec_r16(Register." + reg + ")}"
+    elif dec_r8.match(op):
+        reg = dec_r8.findall(op)[0]
+        out = "{cpu: Cpu -> cpu.dec_r8(Register." + reg + ")}"
+    else:
+        out = "{cpu: Cpu -> }"
+    return out
+
+# r = requests.get("https://izik1.github.io/gbops/table/dmgops.json")
+# open("ops.json", "r").write(r.text)
+# json = r.json()
+json = json.loads(open("ops.json","r").read())
 template = "op[{}] = Opcode(\"{}\", {}, {}) {}"
 out = []
 for i, k in enumerate(json["Unprefixed"]):
@@ -13,7 +43,8 @@ for i, k in enumerate(json["Unprefixed"]):
     time = k["TCyclesBranch"]
     if(i % 16 == 0):
         out.append("")
-    out.append(template.format(code,name,length,time,"{}"))
+    out.append(template.format(code,name,length,time,parseOp(name)))
 
 for i in out:
     print(i)
+

@@ -171,6 +171,20 @@ class Cpu {
     }
 
     /**
+     * Name: SBC A,r8
+     * Description: Subtract [reg] and carry from A and then store result in A
+     */
+    fun subc_a_r8(reg: Register) {
+        val src: UByte = state.reg.getr8(reg)
+        val carry: UInt = if(state.reg.carry) 1u else 0u
+        val result = (state.reg.a - src - carry).toUByte()
+        state.reg.addsub = true
+        state.reg.zero = result == 0.toUByte()
+        state.reg.halfcarry = result and 0xfu < (src and 0xfu) + carry
+        state.reg.carry = result > 0xffu
+        state.reg.a = result
+    }
+    /**
      * Increase the program counter by [num]
      */
     fun cycle(num: Int) {

@@ -198,6 +198,20 @@ class Cpu {
         state.reg.halfcarry = true
         state.reg.a = result
     }
+
+    /**
+     * Name: Xor A,r8
+     * Description: Bitwise XOR between [reg] with A and then store in A
+     */
+    fun xor_a_r8(reg: Register) {
+        val src: UByte = state.reg.getr8(reg)
+        val result = (state.reg.a xor src)
+        state.reg.addsub = false
+        state.reg.carry = false
+        state.reg.zero = result == 0.toUByte()
+        state.reg.halfcarry = false
+        state.reg.a = result
+    }
     /**
      * Increase the program counter by [num]
      */

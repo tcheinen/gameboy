@@ -84,7 +84,7 @@ class Registers(var a: UByte = 0u,
         get() = f[ZERO_FLAG]
         set(num) = f.set(ZERO_FLAG, num)
 
-    var addsub: Boolean
+    var addsub: Boolean // flag n
         get() = f[ADD_SUB_FLAG]
         set(num) = f.set(ADD_SUB_FLAG, num)
 

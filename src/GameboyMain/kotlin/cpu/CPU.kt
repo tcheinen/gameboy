@@ -119,11 +119,25 @@ class Cpu {
     }
 
     /**
-     * Name: LD r8 r8
+     * Name: LD r8,r8
      * Description: Copy 8-bit register [src] to [dest]
      */
     fun ld_r8_r8(dest: Register, src: Register) {
         state.reg.setr8(dest, state.reg.getr8(src))
+    }
+
+    /**
+     * Name: ADD A,r8
+     * Description: Add [reg] to A and then store result in A
+     *
+     */
+    fun add_a_r8(reg: Register) {
+        val prev = state.reg.a
+        state.reg.a = (state.reg.a + state.reg.getr8(reg)).toUByte()
+        state.reg.addsub = false
+        state.reg.zero = state.reg.a == 0.toUByte()
+        state.reg.halfcarry = (((state.reg.a and 0xfu) + 1u) and 0x10u) == 0x10u
+        state.reg.carry = state.reg.a < prev
     }
 
     /**

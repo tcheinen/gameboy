@@ -181,14 +181,14 @@ class Opcodes {
         op[0x9E] = Opcode("SBC A,(HL)", 1, 8) {cpu: Cpu -> }
         op[0x9F] = Opcode("SBC A,A", 1, 4) {cpu: Cpu -> cpu.subc_a_r8(Register.A)}
 
-        op[0xA0] = Opcode("AND A,B", 1, 4) {cpu: Cpu -> }
-        op[0xA1] = Opcode("AND A,C", 1, 4) {cpu: Cpu -> }
-        op[0xA2] = Opcode("AND A,D", 1, 4) {cpu: Cpu -> }
-        op[0xA3] = Opcode("AND A,E", 1, 4) {cpu: Cpu -> }
-        op[0xA4] = Opcode("AND A,H", 1, 4) {cpu: Cpu -> }
-        op[0xA5] = Opcode("AND A,L", 1, 4) {cpu: Cpu -> }
+        op[0xA0] = Opcode("AND A,B", 1, 4) {cpu: Cpu -> cpu.and_a_r8(Register.B)}
+        op[0xA1] = Opcode("AND A,C", 1, 4) {cpu: Cpu -> cpu.and_a_r8(Register.C)}
+        op[0xA2] = Opcode("AND A,D", 1, 4) {cpu: Cpu -> cpu.and_a_r8(Register.D)}
+        op[0xA3] = Opcode("AND A,E", 1, 4) {cpu: Cpu -> cpu.and_a_r8(Register.E)}
+        op[0xA4] = Opcode("AND A,H", 1, 4) {cpu: Cpu -> cpu.and_a_r8(Register.H)}
+        op[0xA5] = Opcode("AND A,L", 1, 4) {cpu: Cpu -> cpu.and_a_r8(Register.L)}
         op[0xA6] = Opcode("AND A,(HL)", 1, 8) {cpu: Cpu -> }
-        op[0xA7] = Opcode("AND A,A", 1, 4) {cpu: Cpu -> }
+        op[0xA7] = Opcode("AND A,A", 1, 4) {cpu: Cpu -> cpu.and_a_r8(Register.A)}
         op[0xA8] = Opcode("XOR A,B", 1, 4) {cpu: Cpu -> }
         op[0xA9] = Opcode("XOR A,C", 1, 4) {cpu: Cpu -> }
         op[0xAA] = Opcode("XOR A,D", 1, 4) {cpu: Cpu -> }

@@ -16,6 +16,7 @@ add_a_r8 = re.compile("ADD A,(.)$")
 addc_a_r8 = re.compile("ADC A,(.)$")
 sub_a_r8 = re.compile("SUB A,(.)$")
 subc_a_r8 = re.compile("SBC A,(.)$")
+and_a_r8 = re.compile("AND A,(.)$")
 
 def parseOp(op):
     out = ""
@@ -58,6 +59,9 @@ def parseOp(op):
     elif subc_a_r8.match(op):
         reg = subc_a_r8.findall(op)[0]
         out = "{cpu: Cpu -> cpu.subc_a_r8(Register." + reg + ")}"
+    elif and_a_r8.match(op):
+        reg = and_a_r8.findall(op)[0]
+        out = "{cpu: Cpu -> cpu.and_a_r8(Register." + reg + ")}"
     else:
         out = "{cpu: Cpu -> }"
     return out

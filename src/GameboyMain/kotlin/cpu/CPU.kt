@@ -184,6 +184,20 @@ class Cpu {
         state.reg.carry = result > 0xffu
         state.reg.a = result
     }
+
+    /**
+     * Name: AND A,r8
+     * Description: Bitwise AND between [reg] with A and then store in A
+     */
+    fun and_a_r8(reg: Register) {
+        val src: UByte = state.reg.getr8(reg)
+        val result = (state.reg.a and src)
+        state.reg.addsub = false
+        state.reg.carry = false
+        state.reg.zero = result == 0.toUByte()
+        state.reg.halfcarry = true
+        state.reg.a = result
+    }
     /**
      * Increase the program counter by [num]
      */

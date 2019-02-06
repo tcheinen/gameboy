@@ -10,6 +10,7 @@ dec_r16 = re.compile("DEC (..)$")
 dec_r8 = re.compile("DEC (.)$")
 ld_r8_r8 = re.compile("LD (.),(.)$")
 add_a_r8 = re.compile("ADD A,(.)$")
+addc_a_r8 = re.compile("ADC A,(.)$")
 
 def parseOp(op):
     out = ""
@@ -34,6 +35,9 @@ def parseOp(op):
     elif add_a_r8.match(op):
         reg = add_a_r8.findall(op)[0]
         out = "{cpu: Cpu -> cpu.add_a_r8(Register." + reg + ")}"
+    elif addc_a_r8.match(op):
+        reg = addc_a_r8.findall(op)[0]
+        out = "{cpu: Cpu -> cpu.addc_a_r8(Register." + reg + ")}"
     else:
         out = "{cpu: Cpu -> }"
     return out

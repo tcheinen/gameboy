@@ -129,15 +129,34 @@ class Cpu {
     /**
      * Name: ADD A,r8
      * Description: Add [reg] to A and then store result in A
-     *
+     * Z is set if a=0
      */
     fun add_a_r8(reg: Register) {
         val prev = state.reg.a
-        state.reg.a = (state.reg.a + state.reg.getr8(reg)).toUByte()
+        val src = state.reg.getr8(reg)
+        val result = (state.reg.a + src).toUByte()
         state.reg.addsub = false
-        state.reg.zero = state.reg.a == 0.toUByte()
-        state.reg.halfcarry = (((state.reg.a and 0xfu) + 1u) and 0x10u) == 0x10u
-        state.reg.carry = state.reg.a < prev
+        state.reg.zero = result == 0.toUByte()
+        state.reg.halfcarry = (((prev and 0xfu) + 1u) and 0x10u) == 0x10u
+        state.reg.carry = result < prev
+        state.reg.a = result
+    }
+
+    /**
+     * Name: ADC A,r8
+     * Description: Add [reg] and carry to A and then store result in A
+     *
+     */
+    fun addc_a_r8(reg: Register) {
+        val prev = state.reg.a
+        val carry: UInt = if(state.reg.carry) 1u else 0u
+        val src = state.reg.getr8(reg)
+        val result = (state.reg.a + src + carry).toUByte()
+        state.reg.addsub = false
+        state.reg.zero = result == 0.toUByte()
+        state.reg.halfcarry = (state.reg.a and 0xfu) + (src and 0xfu) + carry > 0xfu
+        state.reg.carry = (state.reg.a.toUShort()) + (src.toUShort()) + carry > 0xffu
+        state.reg.a = result
     }
 
     /**

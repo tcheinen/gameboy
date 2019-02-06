@@ -11,6 +11,7 @@ class Opcodes {
     }
 
     init {
+
         op[0x0] = Opcode("NOP", 1, 4) { cpu: Cpu -> }
         op[0x1] = Opcode("LD BC,u16", 3, 12) { cpu: Cpu -> cpu.ld_r16_u16(Register.BC) }
         op[0x2] = Opcode("LD (BC),A", 1, 8) { cpu: Cpu -> }
@@ -164,14 +165,14 @@ class Opcodes {
         op[0x8E] = Opcode("ADC A,(HL)", 1, 8) { cpu: Cpu -> }
         op[0x8F] = Opcode("ADC A,A", 1, 4) { cpu: Cpu -> cpu.addc_a_r8(Register.A) }
 
-        op[0x90] = Opcode("SUB A,B", 1, 4) { cpu: Cpu -> }
-        op[0x91] = Opcode("SUB A,C", 1, 4) { cpu: Cpu -> }
-        op[0x92] = Opcode("SUB A,D", 1, 4) { cpu: Cpu -> }
-        op[0x93] = Opcode("SUB A,E", 1, 4) { cpu: Cpu -> }
-        op[0x94] = Opcode("SUB A,H", 1, 4) { cpu: Cpu -> }
-        op[0x95] = Opcode("SUB A,L", 1, 4) { cpu: Cpu -> }
+        op[0x90] = Opcode("SUB A,B", 1, 4) { cpu: Cpu -> cpu.sub_a_r8(Register.B) }
+        op[0x91] = Opcode("SUB A,C", 1, 4) { cpu: Cpu -> cpu.sub_a_r8(Register.C) }
+        op[0x92] = Opcode("SUB A,D", 1, 4) { cpu: Cpu -> cpu.sub_a_r8(Register.D) }
+        op[0x93] = Opcode("SUB A,E", 1, 4) { cpu: Cpu -> cpu.sub_a_r8(Register.E) }
+        op[0x94] = Opcode("SUB A,H", 1, 4) { cpu: Cpu -> cpu.sub_a_r8(Register.H) }
+        op[0x95] = Opcode("SUB A,L", 1, 4) { cpu: Cpu -> cpu.sub_a_r8(Register.L) }
         op[0x96] = Opcode("SUB A,(HL)", 1, 8) { cpu: Cpu -> }
-        op[0x97] = Opcode("SUB A,A", 1, 4) { cpu: Cpu -> }
+        op[0x97] = Opcode("SUB A,A", 1, 4) { cpu: Cpu -> cpu.sub_a_r8(Register.A) }
         op[0x98] = Opcode("SBC A,B", 1, 4) { cpu: Cpu -> }
         op[0x99] = Opcode("SBC A,C", 1, 4) { cpu: Cpu -> }
         op[0x9A] = Opcode("SBC A,D", 1, 4) { cpu: Cpu -> }

@@ -119,6 +119,14 @@ class Cpu {
     }
 
     /**
+     * Name: LD r8 r8
+     * Description: Copy 8-bit register [src] to [dest]
+     */
+    fun ld_r8_r8(dest: Register, src: Register) {
+        state.reg.setr8(dest, state.reg.getr8(src))
+    }
+
+    /**
      * Increase the program counter by [num]
      */
     fun cycle(num: Int) {

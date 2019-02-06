@@ -8,6 +8,7 @@ inc_r16 = re.compile("INC (..)$")
 inc_r8 = re.compile("INC (.)$")
 dec_r16 = re.compile("DEC (..)$")
 dec_r8 = re.compile("DEC (.)$")
+ld_r8_r8 = re.compile("LD (.),(.)$")
 
 def parseOp(op):
     out = ""
@@ -26,6 +27,9 @@ def parseOp(op):
     elif dec_r8.match(op):
         reg = dec_r8.findall(op)[0]
         out = "{cpu: Cpu -> cpu.dec_r8(Register." + reg + ")}"
+    elif ld_r8_r8.match(op):
+        dest, src = ld_r8_r8.findall(op)[0]
+        out = "{cpu: Cpu -> cpu.ld_r8_r8(Register." + dest + ", Register." + src + ")}"
     else:
         out = "{cpu: Cpu -> }"
     return out

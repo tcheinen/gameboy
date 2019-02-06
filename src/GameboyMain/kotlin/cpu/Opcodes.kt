@@ -13,28 +13,28 @@ class Opcodes {
     init {
         op[0x0] = Opcode("NOP", 1, 4) {cpu: Cpu -> }
         op[0x1] = Opcode("LD BC,u16", 3, 12) {cpu: Cpu -> cpu.ld_r16_u16(Register.BC)}
-        op[0x2] = Opcode("LD (BC),A", 1, 8) {cpu: Cpu -> }
+        op[0x2] = Opcode("LD (BC),A", 1, 8) {cpu: Cpu -> cpu.ld_r16_r8(Register.BC, Register.A)}
         op[0x3] = Opcode("INC BC", 1, 8) {cpu: Cpu -> cpu.inc_r16(Register.BC)}
         op[0x4] = Opcode("INC B", 1, 4) {cpu: Cpu -> cpu.inc_r8(Register.B)}
         op[0x5] = Opcode("DEC B", 1, 4) {cpu: Cpu -> cpu.dec_r8(Register.B)}
-        op[0x6] = Opcode("LD B,u8", 2, 8) {cpu: Cpu -> }
-        op[0x7] = Opcode("RLCA", 1, 4) {cpu: Cpu -> }
+        op[0x6] = Opcode("LD B,u8", 2, 8) {cpu: Cpu -> cpu.ld_r8_u8(Register.B)}
+        op[0x7] = Opcode("RLCA", 1, 4) {cpu: Cpu -> cpu.rlc(Register.A)}
         op[0x8] = Opcode("LD (u16),SP", 3, 20) {cpu: Cpu -> }
         op[0x9] = Opcode("ADD HL,BC", 1, 8) {cpu: Cpu -> }
         op[0xA] = Opcode("LD A,(BC)", 1, 8) {cpu: Cpu -> }
         op[0xB] = Opcode("DEC BC", 1, 8) {cpu: Cpu -> cpu.dec_r16(Register.BC)}
         op[0xC] = Opcode("INC C", 1, 4) {cpu: Cpu -> cpu.inc_r8(Register.C)}
         op[0xD] = Opcode("DEC C", 1, 4) {cpu: Cpu -> cpu.dec_r8(Register.C)}
-        op[0xE] = Opcode("LD C,u8", 2, 8) {cpu: Cpu -> }
+        op[0xE] = Opcode("LD C,u8", 2, 8) {cpu: Cpu -> cpu.ld_r8_u8(Register.C)}
         op[0xF] = Opcode("RRCA", 1, 4) {cpu: Cpu -> }
 
         op[0x10] = Opcode("STOP", 2, 4) {cpu: Cpu -> }
         op[0x11] = Opcode("LD DE,u16", 3, 12) {cpu: Cpu -> cpu.ld_r16_u16(Register.DE)}
-        op[0x12] = Opcode("LD (DE),A", 1, 8) {cpu: Cpu -> }
+        op[0x12] = Opcode("LD (DE),A", 1, 8) {cpu: Cpu -> cpu.ld_r16_r8(Register.DE, Register.A)}
         op[0x13] = Opcode("INC DE", 1, 8) {cpu: Cpu -> cpu.inc_r16(Register.DE)}
         op[0x14] = Opcode("INC D", 1, 4) {cpu: Cpu -> cpu.inc_r8(Register.D)}
         op[0x15] = Opcode("DEC D", 1, 4) {cpu: Cpu -> cpu.dec_r8(Register.D)}
-        op[0x16] = Opcode("LD D,u8", 2, 8) {cpu: Cpu -> }
+        op[0x16] = Opcode("LD D,u8", 2, 8) {cpu: Cpu -> cpu.ld_r8_u8(Register.D)}
         op[0x17] = Opcode("RLA", 1, 4) {cpu: Cpu -> }
         op[0x18] = Opcode("JR i8", 2, 12) {cpu: Cpu -> }
         op[0x19] = Opcode("ADD HL,DE", 1, 8) {cpu: Cpu -> }
@@ -42,7 +42,7 @@ class Opcodes {
         op[0x1B] = Opcode("DEC DE", 1, 8) {cpu: Cpu -> cpu.dec_r16(Register.DE)}
         op[0x1C] = Opcode("INC E", 1, 4) {cpu: Cpu -> cpu.inc_r8(Register.E)}
         op[0x1D] = Opcode("DEC E", 1, 4) {cpu: Cpu -> cpu.dec_r8(Register.E)}
-        op[0x1E] = Opcode("LD E,u8", 2, 8) {cpu: Cpu -> }
+        op[0x1E] = Opcode("LD E,u8", 2, 8) {cpu: Cpu -> cpu.ld_r8_u8(Register.E)}
         op[0x1F] = Opcode("RRA", 1, 4) {cpu: Cpu -> }
 
         op[0x20] = Opcode("JR NZ,i8", 2, 12) {cpu: Cpu -> }
@@ -51,7 +51,7 @@ class Opcodes {
         op[0x23] = Opcode("INC HL", 1, 8) {cpu: Cpu -> cpu.inc_r16(Register.HL)}
         op[0x24] = Opcode("INC H", 1, 4) {cpu: Cpu -> cpu.inc_r8(Register.H)}
         op[0x25] = Opcode("DEC H", 1, 4) {cpu: Cpu -> cpu.dec_r8(Register.H)}
-        op[0x26] = Opcode("LD H,u8", 2, 8) {cpu: Cpu -> }
+        op[0x26] = Opcode("LD H,u8", 2, 8) {cpu: Cpu -> cpu.ld_r8_u8(Register.H)}
         op[0x27] = Opcode("DAA", 1, 4) {cpu: Cpu -> }
         op[0x28] = Opcode("JR Z,i8", 2, 12) {cpu: Cpu -> }
         op[0x29] = Opcode("ADD HL,HL", 1, 8) {cpu: Cpu -> }
@@ -59,7 +59,7 @@ class Opcodes {
         op[0x2B] = Opcode("DEC HL", 1, 8) {cpu: Cpu -> cpu.dec_r16(Register.HL)}
         op[0x2C] = Opcode("INC L", 1, 4) {cpu: Cpu -> cpu.inc_r8(Register.L)}
         op[0x2D] = Opcode("DEC L", 1, 4) {cpu: Cpu -> cpu.dec_r8(Register.L)}
-        op[0x2E] = Opcode("LD L,u8", 2, 8) {cpu: Cpu -> }
+        op[0x2E] = Opcode("LD L,u8", 2, 8) {cpu: Cpu -> cpu.ld_r8_u8(Register.L)}
         op[0x2F] = Opcode("CPL", 1, 4) {cpu: Cpu -> }
 
         op[0x30] = Opcode("JR NC,i8", 2, 12) {cpu: Cpu -> }
@@ -76,7 +76,7 @@ class Opcodes {
         op[0x3B] = Opcode("DEC SP", 1, 8) {cpu: Cpu -> cpu.dec_r16(Register.SP)}
         op[0x3C] = Opcode("INC A", 1, 4) {cpu: Cpu -> cpu.inc_r8(Register.A)}
         op[0x3D] = Opcode("DEC A", 1, 4) {cpu: Cpu -> cpu.dec_r8(Register.A)}
-        op[0x3E] = Opcode("LD A,u8", 2, 8) {cpu: Cpu -> }
+        op[0x3E] = Opcode("LD A,u8", 2, 8) {cpu: Cpu -> cpu.ld_r8_u8(Register.A)}
         op[0x3F] = Opcode("CCF", 1, 4) {cpu: Cpu -> }
 
         op[0x40] = Opcode("LD B,B", 1, 4) {cpu: Cpu -> cpu.ld_r8_r8(Register.B, Register.B)}
@@ -130,14 +130,14 @@ class Opcodes {
         op[0x6E] = Opcode("LD L,(HL)", 1, 8) {cpu: Cpu -> }
         op[0x6F] = Opcode("LD L,A", 1, 4) {cpu: Cpu -> cpu.ld_r8_r8(Register.L, Register.A)}
 
-        op[0x70] = Opcode("LD (HL),B", 1, 8) {cpu: Cpu -> }
-        op[0x71] = Opcode("LD (HL),C", 1, 8) {cpu: Cpu -> }
-        op[0x72] = Opcode("LD (HL),D", 1, 8) {cpu: Cpu -> }
-        op[0x73] = Opcode("LD (HL),E", 1, 8) {cpu: Cpu -> }
-        op[0x74] = Opcode("LD (HL),H", 1, 8) {cpu: Cpu -> }
-        op[0x75] = Opcode("LD (HL),L", 1, 8) {cpu: Cpu -> }
+        op[0x70] = Opcode("LD (HL),B", 1, 8) {cpu: Cpu -> cpu.ld_r16_r8(Register.HL, Register.B)}
+        op[0x71] = Opcode("LD (HL),C", 1, 8) {cpu: Cpu -> cpu.ld_r16_r8(Register.HL, Register.C)}
+        op[0x72] = Opcode("LD (HL),D", 1, 8) {cpu: Cpu -> cpu.ld_r16_r8(Register.HL, Register.D)}
+        op[0x73] = Opcode("LD (HL),E", 1, 8) {cpu: Cpu -> cpu.ld_r16_r8(Register.HL, Register.E)}
+        op[0x74] = Opcode("LD (HL),H", 1, 8) {cpu: Cpu -> cpu.ld_r16_r8(Register.HL, Register.H)}
+        op[0x75] = Opcode("LD (HL),L", 1, 8) {cpu: Cpu -> cpu.ld_r16_r8(Register.HL, Register.L)}
         op[0x76] = Opcode("HALT", 1, 4) {cpu: Cpu -> }
-        op[0x77] = Opcode("LD (HL),A", 1, 8) {cpu: Cpu -> }
+        op[0x77] = Opcode("LD (HL),A", 1, 8) {cpu: Cpu -> cpu.ld_r16_r8(Register.HL, Register.A)}
         op[0x78] = Opcode("LD A,B", 1, 4) {cpu: Cpu -> cpu.ld_r8_r8(Register.A, Register.B)}
         op[0x79] = Opcode("LD A,C", 1, 4) {cpu: Cpu -> cpu.ld_r8_r8(Register.A, Register.C)}
         op[0x7A] = Opcode("LD A,D", 1, 4) {cpu: Cpu -> cpu.ld_r8_r8(Register.A, Register.D)}

@@ -12,7 +12,7 @@ import shr
 @ExperimentalUnsignedTypes
 class Cpu {
 
-    var state: CPUState = CPUState()
+    private var state: CPUState = CPUState()
     var clock: Clock = Clock()
 
 
@@ -43,11 +43,11 @@ class Cpu {
             Register.BC -> state.reg.bc
             Register.DE -> state.reg.de
             Register.HL -> {
-                state.reg.hl;
+                state.reg.hl
                 state.reg.hl++
             }
             Register.SP -> {
-                state.reg.hl;
+                state.reg.hl
                 state.reg.hl--
             }
             else -> 0u // should never happen
@@ -219,7 +219,7 @@ class Cpu {
     }
 
     /**
-     * Read 8-bit [value] from memory at address [address]
+     * Read 8-bit value from memory at address [address]
      * // TODO complete this
      */
     fun readByte(address: UShort): UByte {
@@ -248,7 +248,7 @@ class Cpu {
     }
 
     /**
-     * Write 16-bit [value] to the memory at address [address]
+     * Write 16-bit value to the memory at address [address]
      */
     fun writeShort(address: UShort, value: UShort) {
         writeByte(address, value.high)
@@ -256,7 +256,7 @@ class Cpu {
     }
 
     /**
-     * Read 16-bit [value] from memory at address [address]
+     * Read 16-bit value from memory at address [address]
      */
     fun readShort(address: UShort): UShort {
         return readByte(address).combine(readByte(address))

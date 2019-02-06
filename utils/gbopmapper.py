@@ -4,10 +4,13 @@ import json
 import re
 
 ld_r16_u16 = re.compile("LD (..),u16$")
+ld_r16_r8 = re.compile("LD \((..)\),(.)$")
 inc_r16 = re.compile("INC (..)$")
 inc_r8 = re.compile("INC (.)$")
 dec_r16 = re.compile("DEC (..)$")
 dec_r8 = re.compile("DEC (.)$")
+ld_r8_u8 = re.compile("LD (.),u8$")
+rlc = re.compile("RLC(.)$")
 ld_r8_r8 = re.compile("LD (.),(.)$")
 add_a_r8 = re.compile("ADD A,(.)$")
 addc_a_r8 = re.compile("ADC A,(.)$")
@@ -19,6 +22,9 @@ def parseOp(op):
     if ld_r16_u16.match(op):
         reg = ld_r16_u16.findall(op)[0]
         out = "{cpu: Cpu -> cpu.ld_r16_u16(Register." + reg + ")}"
+    elif ld_r16_r8.match(op):
+        reg1, reg2 = ld_r16_r8.findall(op)[0]
+        out = "{cpu: Cpu -> cpu.ld_r16_r8(Register." + reg1 + ", Register." + reg2 + ")}"
     elif inc_r16.match(op):
         reg = inc_r16.findall(op)[0]
         out = "{cpu: Cpu -> cpu.inc_r16(Register." + reg + ")}"
@@ -31,6 +37,12 @@ def parseOp(op):
     elif dec_r8.match(op):
         reg = dec_r8.findall(op)[0]
         out = "{cpu: Cpu -> cpu.dec_r8(Register." + reg + ")}"
+    elif ld_r8_u8.match(op):
+        reg = ld_r8_u8.findall(op)[0]
+        out = "{cpu: Cpu -> cpu.ld_r8_u8(Register." + reg + ")}"
+    elif rlc.match(op):
+        reg = rlc.findall(op)[0]
+        out = "{cpu: Cpu -> cpu.rlc(Register." + reg + ")}"
     elif ld_r8_r8.match(op):
         dest, src = ld_r8_r8.findall(op)[0]
         out = "{cpu: Cpu -> cpu.ld_r8_r8(Register." + dest + ", Register." + src + ")}"

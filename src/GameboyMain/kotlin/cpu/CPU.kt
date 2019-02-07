@@ -12,8 +12,7 @@ import shr
 @ExperimentalUnsignedTypes
 class Cpu {
 
-    private var state: CPUState = CPUState()
-    var clock: Clock = Clock()
+    private var registers: Registers = Registers()
 
 
     /**
@@ -21,14 +20,14 @@ class Cpu {
      * Description: Set a 16 bit register to two bytes read from memory at the program counter
      */
     fun ld_r16_u16(reg: Register) {
-        val value: UShort = readShort(state.reg.pc)
+        val value: UShort = readShort(registers.pc)
         when (reg) {
-            Register.SP -> state.reg.sp = value
-            Register.PC -> state.reg.pc = value
-            Register.AF -> state.reg.af = value
-            Register.BC -> state.reg.bc = value
-            Register.DE -> state.reg.de = value
-            Register.HL -> state.reg.hl = value
+            Register.SP -> registers.sp = value
+            Register.PC -> registers.pc = value
+            Register.AF -> registers.af = value
+            Register.BC -> registers.bc = value
+            Register.DE -> registers.de = value
+            Register.HL -> registers.hl = value
             else -> {} // should never happen
         }
     }
@@ -40,19 +39,19 @@ class Cpu {
      */
     fun ld_r16_r8(reg16: Register, reg8: Register) {
         val address: UShort = when (reg16) {
-            Register.BC -> state.reg.bc
-            Register.DE -> state.reg.de
+            Register.BC -> registers.bc
+            Register.DE -> registers.de
             Register.HL -> {
-                state.reg.hl
-                state.reg.hl++
+                registers.hl
+                registers.hl++
             }
             Register.SP -> {
-                state.reg.hl
-                state.reg.hl--
+                registers.hl
+                registers.hl--
             }
             else -> 0u // should never happen
         }
-        writeByte(address,  state.reg.getr8(reg8))
+        writeByte(address,  registers.getr8(reg8))
     }
 
     /**
@@ -60,18 +59,18 @@ class Cpu {
      * Description: Increment 16-bit register [reg]
      */
     fun inc_r16(reg: Register) {
-        state.reg.setr16(reg, (state.reg.getr16(reg)+1u).toUShort())
+        registers.setr16(reg, (registers.getr16(reg)+1u).toUShort())
     }
     /**
      * Name: INC r8
      * Description: Increment 16-bit register [reg]
      */
     fun inc_r8(reg: Register) {
-        val currentValue: UByte = state.reg.getr8(reg)
-        state.reg.addsub = false
-        state.reg.zero = (currentValue == (0xffu).toUByte())
-        state.reg.halfcarry = (((currentValue and 0xfu) + 1u) and 0x10u) == 0x10u
-        state.reg.setr8(reg, (state.reg.getr8(reg)+1u).toUByte())
+        val currentValue: UByte = registers.getr8(reg)
+        registers.addsub = false
+        registers.zero = (currentValue == (0xffu).toUByte())
+        registers.halfcarry = (((currentValue and 0xfu) + 1u) and 0x10u) == 0x10u
+        registers.setr8(reg, (registers.getr8(reg)+1u).toUByte())
     }
 
     /**
@@ -79,29 +78,29 @@ class Cpu {
      * Description: Decrement 16-bit register [reg]
      */
     fun dec_r16(reg: Register) {
-        state.reg.setr16(reg, (state.reg.getr16(reg)-1u).toUShort())
+        registers.setr16(reg, (registers.getr16(reg)-1u).toUShort())
     }
     /**
      * Name: DEC r8
      * Description: Decrement 16-bit register [reg]
      */
     fun dec_r8(reg: Register) {
-        state.reg.setr8(reg, (state.reg.getr8(reg)-1u).toUByte())
+        registers.setr8(reg, (registers.getr8(reg)-1u).toUByte())
     }
     /**
      * Name: LD r8, u8
      * Description: Set an 8 bit register to a bytes read from memory at the program counter
      */
     fun ld_r8_u8(reg: Register) {
-        val value: UByte = readByte(state.reg.pc)
+        val value: UByte = readByte(registers.pc)
         when (reg) {
-            Register.A -> state.reg.a = value
-            Register.B -> state.reg.b = value
-            Register.C -> state.reg.c = value
-            Register.D -> state.reg.d = value
-            Register.E -> state.reg.e = value
-            Register.H -> state.reg.h = value
-            Register.L -> state.reg.l = value
+            Register.A -> registers.a = value
+            Register.B -> registers.b = value
+            Register.C -> registers.c = value
+            Register.D -> registers.d = value
+            Register.E -> registers.e = value
+            Register.H -> registers.h = value
+            Register.L -> registers.l = value
             else -> {} // should never happen
         }
     }
@@ -113,9 +112,9 @@ class Cpu {
      * If bit 7 is set, set carry.  Otherwise reset.  All other flags are reset
      */
     fun rlc(reg: Register) {
-        state.reg.f.clear()
-        state.reg.carry = state.reg.a >= 0x80u
-        state.reg.setr8(reg, (state.reg.getr8(reg) shl 1) or (state.reg.getr8(reg) shr 7))
+        registers.f.clear()
+        registers.carry = registers.a >= 0x80u
+        registers.setr8(reg, (registers.getr8(reg) shl 1) or (registers.getr8(reg) shr 7))
     }
 
     /**
@@ -123,7 +122,7 @@ class Cpu {
      * Description: Copy 8-bit register [src] to [dest]
      */
     fun ld_r8_r8(dest: Register, src: Register) {
-        state.reg.setr8(dest, state.reg.getr8(src))
+        registers.setr8(dest, registers.getr8(src))
     }
 
     /**
@@ -131,13 +130,13 @@ class Cpu {
      * Description: Add [reg] to A and then store result in A
      */
     fun add_a_r8(reg: Register) {
-        val src = state.reg.getr8(reg)
-        val result = (state.reg.a + src).toUByte()
-        state.reg.addsub = false
-        state.reg.zero = result == 0.toUByte()
-        state.reg.halfcarry = (((state.reg.a and 0xfu) + 1u) and 0x10u) == 0x10u
-        state.reg.carry = result < state.reg.a
-        state.reg.a = result
+        val src = registers.getr8(reg)
+        val result = (registers.a + src).toUByte()
+        registers.addsub = false
+        registers.zero = result == 0.toUByte()
+        registers.halfcarry = (((registers.a and 0xfu) + 1u) and 0x10u) == 0x10u
+        registers.carry = result < registers.a
+        registers.a = result
     }
 
     /**
@@ -146,14 +145,14 @@ class Cpu {
      *
      */
     fun addc_a_r8(reg: Register) {
-        val carry: UInt = if(state.reg.carry) 1u else 0u
-        val src = state.reg.getr8(reg)
-        val result = (state.reg.a + src + carry).toUByte()
-        state.reg.addsub = false
-        state.reg.zero = result == 0.toUByte()
-        state.reg.halfcarry = (state.reg.a and 0xfu) + (src and 0xfu) + carry > 0xfu
-        state.reg.carry = (state.reg.a.toUShort()) + (src.toUShort()) + carry > 0xffu
-        state.reg.a = result
+        val carry: UInt = if(registers.carry) 1u else 0u
+        val src = registers.getr8(reg)
+        val result = (registers.a + src + carry).toUByte()
+        registers.addsub = false
+        registers.zero = result == 0.toUByte()
+        registers.halfcarry = (registers.a and 0xfu) + (src and 0xfu) + carry > 0xfu
+        registers.carry = (registers.a.toUShort()) + (src.toUShort()) + carry > 0xffu
+        registers.a = result
     }
 
     /**
@@ -161,13 +160,13 @@ class Cpu {
      * Description: Subtract [reg] from A and then store result in A
      */
     fun sub_a_r8(reg: Register) {
-        val src: UByte = state.reg.getr8(reg)
-        val result = (state.reg.a - src).toUByte()
-        state.reg.addsub = true
-        state.reg.zero = result == 0.toUByte()
-        state.reg.halfcarry = result and 0xfu < src and 0xfu
-        state.reg.carry = src > result
-        state.reg.a = result
+        val src: UByte = registers.getr8(reg)
+        val result = (registers.a - src).toUByte()
+        registers.addsub = true
+        registers.zero = result == 0.toUByte()
+        registers.halfcarry = result and 0xfu < src and 0xfu
+        registers.carry = src > result
+        registers.a = result
     }
 
     /**
@@ -175,14 +174,14 @@ class Cpu {
      * Description: Subtract [reg] and carry from A and then store result in A
      */
     fun subc_a_r8(reg: Register) {
-        val src: UByte = state.reg.getr8(reg)
-        val carry: UInt = if(state.reg.carry) 1u else 0u
-        val result = (state.reg.a - src - carry).toUByte()
-        state.reg.addsub = true
-        state.reg.zero = result == 0.toUByte()
-        state.reg.halfcarry = result and 0xfu < (src and 0xfu) + carry
-        state.reg.carry = result > 0xffu
-        state.reg.a = result
+        val src: UByte = registers.getr8(reg)
+        val carry: UInt = if(registers.carry) 1u else 0u
+        val result = (registers.a - src - carry).toUByte()
+        registers.addsub = true
+        registers.zero = result == 0.toUByte()
+        registers.halfcarry = result and 0xfu < (src and 0xfu) + carry
+        registers.carry = result > 0xffu
+        registers.a = result
     }
 
     /**
@@ -190,13 +189,13 @@ class Cpu {
      * Description: Bitwise AND between [reg] with A and then store in A
      */
     fun and_a_r8(reg: Register) {
-        val src: UByte = state.reg.getr8(reg)
-        val result = (state.reg.a and src)
-        state.reg.addsub = false
-        state.reg.carry = false
-        state.reg.zero = result == 0.toUByte()
-        state.reg.halfcarry = true
-        state.reg.a = result
+        val src: UByte = registers.getr8(reg)
+        val result = (registers.a and src)
+        registers.addsub = false
+        registers.carry = false
+        registers.zero = result == 0.toUByte()
+        registers.halfcarry = true
+        registers.a = result
     }
 
     /**
@@ -204,19 +203,19 @@ class Cpu {
      * Description: Bitwise XOR between [reg] with A and then store in A
      */
     fun xor_a_r8(reg: Register) {
-        val src: UByte = state.reg.getr8(reg)
-        val result = (state.reg.a xor src)
-        state.reg.addsub = false
-        state.reg.carry = false
-        state.reg.zero = result == 0.toUByte()
-        state.reg.halfcarry = false
-        state.reg.a = result
+        val src: UByte = registers.getr8(reg)
+        val result = (registers.a xor src)
+        registers.addsub = false
+        registers.carry = false
+        registers.zero = result == 0.toUByte()
+        registers.halfcarry = false
+        registers.a = result
     }
     /**
      * Increase the program counter by [num]
      */
     fun cycle(num: Int) {
-        state.reg.pc = (state.reg.pc + num.toUInt()).toUShort()
+        registers.pc = (registers.pc + num.toUInt()).toUShort()
     }
 
     /**

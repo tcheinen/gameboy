@@ -6,32 +6,6 @@ import combine
 import high
 import low
 
-@kotlin.ExperimentalUnsignedTypes
-data class CPUState(val reg: Registers = Registers(),
-                    var m: UShort = 0u,
-                    var t: UShort = 0u)
-@kotlin.ExperimentalUnsignedTypes
-data class Clock(var m: UShort = 0u,
-                 var t: UShort = 0u)
-
-
-enum class Register {
-    A,
-    B,
-    C,
-    D,
-    E,
-    H,
-    L,
-    F,
-    SP,
-    PC,
-    AF,
-    BC,
-    DE,
-    HL
-}
-
 /**
  * Stores the CPU Registers with convenience methods for accessing them as 16 bit
  */
@@ -157,4 +131,21 @@ class Registers(var a: UByte = 0u,
             else -> {}
         }
     }
+}
+
+enum class Register {
+    A,
+    B,
+    C,
+    D,
+    E,
+    H,
+    L,
+    F,
+    SP,
+    PC,
+    AF,
+    BC,
+    DE,
+    HL
 }

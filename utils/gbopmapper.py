@@ -18,6 +18,7 @@ sub_a_r8 = re.compile("SUB A,(.)$")
 subc_a_r8 = re.compile("SBC A,(.)$")
 and_a_r8 = re.compile("AND A,(.)$")
 xor_a_r8 = re.compile("XOR A,(.)$")
+or_a_r8 = re.compile("OR A,(.)$")
 def parseOp(op):
     out = ""
     if ld_r16_u16.match(op):
@@ -65,6 +66,9 @@ def parseOp(op):
     elif xor_a_r8.match(op):
         reg = xor_a_r8.findall(op)[0]
         out = "{cpu: Cpu -> cpu.xor_a_r8(Register." + reg + ")}"
+    elif or_a_r8.match(op):
+        reg = or_a_r8.findall(op)[0]
+        out = "{cpu: Cpu -> cpu.or_a_r8(Register." + reg + ")}"
     else:
         out = "{cpu: Cpu -> }"
     return out

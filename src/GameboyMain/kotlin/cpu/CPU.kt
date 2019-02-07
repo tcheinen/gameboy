@@ -199,12 +199,25 @@ class Cpu {
     }
 
     /**
-     * Name: Xor A,r8
+     * Name: XOR A,r8
      * Description: Bitwise XOR between [reg] with A and then store in A
      */
     fun xor_a_r8(reg: Register) {
         val src: UByte = registers.getr8(reg)
         val result = (registers.a xor src)
+        registers.addsub = false
+        registers.carry = false
+        registers.zero = result == 0.toUByte()
+        registers.halfcarry = false
+        registers.a = result
+    }
+    /**
+     * Name: OR A,r8
+     * Description: Bitwise OR between [reg] with A and then store in A
+     */
+    fun or_a_r8(reg: Register) {
+        val src: UByte = registers.getr8(reg)
+        val result = (registers.a or src)
         registers.addsub = false
         registers.carry = false
         registers.zero = result == 0.toUByte()

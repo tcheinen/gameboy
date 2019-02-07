@@ -12,6 +12,7 @@ class Opcodes {
 
     init {
 
+
         op[0x0] = Opcode("NOP", 1, 4) { cpu: Cpu -> }
         op[0x1] = Opcode("LD BC,u16", 3, 12) { cpu: Cpu -> cpu.ld_r16_u16(Register.BC) }
         op[0x2] = Opcode("LD (BC),A", 1, 8) { cpu: Cpu -> cpu.ld_r16_r8(Register.BC, Register.A) }
@@ -199,14 +200,14 @@ class Opcodes {
         op[0xAE] = Opcode("XOR A,(HL)", 1, 8) { cpu: Cpu -> }
         op[0xAF] = Opcode("XOR A,A", 1, 4) { cpu: Cpu -> cpu.xor_a_r8(Register.A) }
 
-        op[0xB0] = Opcode("OR A,B", 1, 4) { cpu: Cpu -> }
-        op[0xB1] = Opcode("OR A,C", 1, 4) { cpu: Cpu -> }
-        op[0xB2] = Opcode("OR A,D", 1, 4) { cpu: Cpu -> }
-        op[0xB3] = Opcode("OR A,E", 1, 4) { cpu: Cpu -> }
-        op[0xB4] = Opcode("OR A,H", 1, 4) { cpu: Cpu -> }
-        op[0xB5] = Opcode("OR A,L", 1, 4) { cpu: Cpu -> }
+        op[0xB0] = Opcode("OR A,B", 1, 4) { cpu: Cpu -> cpu.or_a_r8(Register.B) }
+        op[0xB1] = Opcode("OR A,C", 1, 4) { cpu: Cpu -> cpu.or_a_r8(Register.C) }
+        op[0xB2] = Opcode("OR A,D", 1, 4) { cpu: Cpu -> cpu.or_a_r8(Register.D) }
+        op[0xB3] = Opcode("OR A,E", 1, 4) { cpu: Cpu -> cpu.or_a_r8(Register.E) }
+        op[0xB4] = Opcode("OR A,H", 1, 4) { cpu: Cpu -> cpu.or_a_r8(Register.H) }
+        op[0xB5] = Opcode("OR A,L", 1, 4) { cpu: Cpu -> cpu.or_a_r8(Register.L) }
         op[0xB6] = Opcode("OR A,(HL)", 1, 8) { cpu: Cpu -> }
-        op[0xB7] = Opcode("OR A,A", 1, 4) { cpu: Cpu -> }
+        op[0xB7] = Opcode("OR A,A", 1, 4) { cpu: Cpu -> cpu.or_a_r8(Register.A) }
         op[0xB8] = Opcode("CP A,B", 1, 4) { cpu: Cpu -> }
         op[0xB9] = Opcode("CP A,C", 1, 4) { cpu: Cpu -> }
         op[0xBA] = Opcode("CP A,D", 1, 4) { cpu: Cpu -> }

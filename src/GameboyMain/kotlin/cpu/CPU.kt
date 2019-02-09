@@ -224,6 +224,20 @@ class Cpu {
         registers.halfcarry = false
         registers.a = result
     }
+
+    /**
+     * Name: CP A,r8
+     * Description: Subtract [reg] from A and discard result
+     */
+    fun cp_a_r8(reg: Register) {
+        val src: UByte = registers.getr8(reg)
+        val a = registers.a
+        registers.addsub = true
+        registers.carry = a < src
+        registers.zero = src == a
+        registers.halfcarry = a and 0xfu < src and 0xfu
+    }
+
     /**
      * Increase the program counter by [num]
      */

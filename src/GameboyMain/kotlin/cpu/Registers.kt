@@ -72,7 +72,6 @@ class Registers(var a: UByte = 0u,
 
     /**
      * Return 8-bit register [reg] by enum [Register]
-     * This only exists if I want to get or set a register by enum
      */
     fun getr8(reg: Register): UByte {
         return when(reg) {
@@ -103,7 +102,6 @@ class Registers(var a: UByte = 0u,
     }
     /**
      * Return 16-bit register [reg] by enum [Register]
-     * This only exists if I want to get or set a register by enum
      */
     fun getr16(reg: Register): UShort {
         return when(reg) {

@@ -238,10 +238,31 @@ class Cpu {
         registers.halfcarry = a and 0xfu < src and 0xfu
     }
 
+
+    /**
+     * Get an 8-bit value from register
+     * Value will be the contents of an 8-bit register or a byte at the memory address stored in a 16-bit register
+     */
+    fun get_u8_register(reg: Register): UByte {
+        return when(reg) {
+            Register.A -> registers.a
+            Register.B -> registers.b
+            Register.C -> registers.c
+            Register.D -> registers.d
+            Register.E -> registers.e
+            Register.H -> registers.h
+            Register.L -> registers.l
+            Register.HL -> readByte(registers.hl)
+            Register.PC -> readByte(registers.pc)
+            else -> 0u // should not happen
+        }
+
+    }
+
     /**
      * Increase the program counter by [num]
      */
-    fun cycle(num: Int) {
+    fun increase_pc(num: Int) {
         registers.pc = (registers.pc + num.toUInt()).toUShort()
     }
 
@@ -249,7 +270,7 @@ class Cpu {
      * Write 8-bit [value] to the memory at address [address]
      */
     fun writeByte(address: UShort, value: UByte) {
-        cycle(4)
+        increase_pc(4)
         when (address.toInt()) {
             in 0x0000..0x3FFF -> {
             } // rom bank 0
@@ -277,7 +298,7 @@ class Cpu {
      * // TODO complete this
      */
     fun readByte(address: UShort): UByte {
-        cycle(4)
+        increase_pc(4)
         when (address.toInt()) {
             in 0x0000..0x3FFF -> {
             } // rom bank 0

@@ -122,7 +122,8 @@ class Cpu {
      * Description: Copy 8-bit register [src] to [dest]
      */
     fun ld_r8_r8(dest: Register, src: Register) {
-        registers.setr8(dest, registers.getr8(src))
+        val value: UByte = get_u8_register(src)
+        registers.setr8(dest, value)
     }
 
     /**
@@ -130,7 +131,7 @@ class Cpu {
      * Description: Add [reg] to A and then store result in A
      */
     fun add_a_r8(reg: Register) {
-        val src = registers.getr8(reg)
+        val src = get_u8_register(reg)
         val result = (registers.a + src).toUByte()
         registers.addsub = false
         registers.zero = result == 0.toUByte()
@@ -146,7 +147,7 @@ class Cpu {
      */
     fun addc_a_r8(reg: Register) {
         val carry: UInt = if(registers.carry) 1u else 0u
-        val src = registers.getr8(reg)
+        val src = get_u8_register(reg)
         val result = (registers.a + src + carry).toUByte()
         registers.addsub = false
         registers.zero = result == 0.toUByte()
@@ -160,7 +161,7 @@ class Cpu {
      * Description: Subtract [reg] from A and then store result in A
      */
     fun sub_a_r8(reg: Register) {
-        val src: UByte = registers.getr8(reg)
+        val src = get_u8_register(reg)
         val result = (registers.a - src).toUByte()
         registers.addsub = true
         registers.zero = result == 0.toUByte()
@@ -174,7 +175,7 @@ class Cpu {
      * Description: Subtract [reg] and carry from A and then store result in A
      */
     fun subc_a_r8(reg: Register) {
-        val src: UByte = registers.getr8(reg)
+        val src = get_u8_register(reg)
         val carry: UInt = if(registers.carry) 1u else 0u
         val result = (registers.a - src - carry).toUByte()
         registers.addsub = true
@@ -189,7 +190,7 @@ class Cpu {
      * Description: Bitwise AND between [reg] with A and then store in A
      */
     fun and_a_r8(reg: Register) {
-        val src: UByte = registers.getr8(reg)
+        val src = get_u8_register(reg)
         val result = (registers.a and src)
         registers.addsub = false
         registers.carry = false
@@ -203,7 +204,7 @@ class Cpu {
      * Description: Bitwise XOR between [reg] with A and then store in A
      */
     fun xor_a_r8(reg: Register) {
-        val src: UByte = registers.getr8(reg)
+        val src = get_u8_register(reg)
         val result = (registers.a xor src)
         registers.addsub = false
         registers.carry = false
@@ -216,7 +217,7 @@ class Cpu {
      * Description: Bitwise OR between [reg] with A and then store in A
      */
     fun or_a_r8(reg: Register) {
-        val src: UByte = registers.getr8(reg)
+        val src = get_u8_register(reg)
         val result = (registers.a or src)
         registers.addsub = false
         registers.carry = false
@@ -230,7 +231,7 @@ class Cpu {
      * Description: Subtract [reg] from A and discard result
      */
     fun cp_a_r8(reg: Register) {
-        val src: UByte = registers.getr8(reg)
+        val src = get_u8_register(reg)
         val a = registers.a
         registers.addsub = true
         registers.carry = a < src
@@ -254,6 +255,7 @@ class Cpu {
             Register.L -> registers.l
             Register.HL -> readByte(registers.hl)
             Register.PC -> readByte(registers.pc)
+            Register.u8 -> readByte(registers.pc)
             else -> 0u // should not happen
         }
 

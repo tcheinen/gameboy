@@ -145,5 +145,6 @@ enum class Register {
     AF,
     BC,
     DE,
-    HL
+    HL,
+    u8 // refers to the memory at the address PC is pointing to
 }

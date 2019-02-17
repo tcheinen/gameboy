@@ -14,7 +14,8 @@ class Cpu {
 
     private var registers: Registers = Registers()
 
-
+    var status: State = State.Okay
+    var ime: Boolean = false
     /**
      * Name: LD r16, u16
      * Description: Set a 16 bit register to two bytes read from memory at the program counter
@@ -248,6 +249,19 @@ class Cpu {
             val address: UShort = popShort()
             registers.pc = address
         }
+    }
+
+
+    /**
+     * Name: HALT
+     * Description: Halts execution
+     */
+    fun halt() {
+        // TODO im pretty sure theres another condition
+        if(ime) {
+            status = State.Halt
+        }
+
     }
 
     /**

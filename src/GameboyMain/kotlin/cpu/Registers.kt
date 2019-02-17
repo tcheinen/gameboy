@@ -196,9 +196,3 @@ enum class Flag {
     C
 }
 
-enum class Condition {
-    Z,
-    NZ,
-    C,
-    NC
-}

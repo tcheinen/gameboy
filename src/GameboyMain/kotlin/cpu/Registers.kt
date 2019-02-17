@@ -28,7 +28,7 @@ class Registers(var a: UByte = 0u,
     }
 
     var af: UShort
-        get() =  a.combine(f.byte)
+        get() = a.combine(f.byte)
         set(num) {
             a = num.high
             f = num.low.bitset
@@ -74,7 +74,7 @@ class Registers(var a: UByte = 0u,
      * Return 8-bit register [reg] by enum [Register]
      */
     fun getr8(reg: Register): UByte {
-        return when(reg) {
+        return when (reg) {
             Register.A -> a
             Register.B -> b
             Register.C -> c
@@ -85,11 +85,12 @@ class Registers(var a: UByte = 0u,
             else -> 0u
         }
     }
+
     /**
      * Set 8-bit register [reg] to [value]
      */
     fun setr8(reg: Register, value: UByte) {
-        when(reg) {
+        when (reg) {
             Register.A -> a = value
             Register.B -> b = value
             Register.C -> c = value
@@ -97,14 +98,16 @@ class Registers(var a: UByte = 0u,
             Register.E -> e = value
             Register.H -> h = value
             Register.L -> l = value
-            else -> {}
+            else -> {
+            }
         }
     }
+
     /**
      * Return 16-bit register [reg] by enum [Register]
      */
     fun getr16(reg: Register): UShort {
-        return when(reg) {
+        return when (reg) {
             Register.SP -> sp
             Register.PC -> pc
             Register.AF -> af
@@ -119,14 +122,51 @@ class Registers(var a: UByte = 0u,
      * Set 16-bit register [reg] to [value]
      */
     fun setr16(reg: Register, value: UShort) {
-        when(reg) {
+        when (reg) {
             Register.SP -> sp = value
             Register.PC -> pc = value
             Register.AF -> af = value
             Register.BC -> bc = value
             Register.DE -> de = value
             Register.HL -> hl = value
-            else -> {}
+            else -> {
+            }
+        }
+    }
+
+    /**
+     * Return 8-bit register [reg] by enum [Register]
+     */
+    fun getFlag(flag: Flag): Boolean {
+        return when (flag) {
+            Flag.Z -> zero
+            Flag.N -> addsub
+            Flag.H -> halfcarry
+            Flag.C -> carry
+        }
+    }
+
+    /**
+     * Set 8-bit register [reg] to [value]
+     */
+    fun setFlag(flag: Flag, value: Boolean) {
+        when (flag) {
+            Flag.Z -> zero = value
+            Flag.N -> addsub = value
+            Flag.H -> halfcarry = value
+            Flag.C -> carry = value
+        }
+    }
+
+    /**
+     * Return boolean based on truth value of condition [cond]
+     */
+    fun checkCondition(cond: Condition): Boolean {
+        return when(cond) {
+            Condition.Z -> zero
+            Condition.NZ -> !zero
+            Condition.C -> carry
+            Condition.NC -> !carry
         }
     }
 }
@@ -147,4 +187,18 @@ enum class Register {
     DE,
     HL,
     u8 // refers to the memory at the address PC is pointing to
+}
+
+enum class Flag {
+    Z,
+    N,
+    H,
+    C
+}
+
+enum class Condition {
+    Z,
+    NZ,
+    C,
+    NC
 }

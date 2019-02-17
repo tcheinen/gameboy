@@ -216,7 +216,7 @@ class Opcodes {
         op[0xBE] = Opcode("CP A,(HL)", 1, 8) {cpu: Cpu -> cpu.cp_a_r8(Register.HL)}
         op[0xBF] = Opcode("CP A,A", 1, 4) {cpu: Cpu -> cpu.cp_a_r8(Register.A)}
 
-        op[0xC0] = Opcode("RET NZ", 1, 20) {cpu: Cpu -> }
+        op[0xC0] = Opcode("RET NZ", 1, 20) {cpu: Cpu -> cpu.retc(Condition.NZ)}
         op[0xC1] = Opcode("POP BC", 1, 12) {cpu: Cpu -> }
         op[0xC2] = Opcode("JP NZ,u16", 3, 16) {cpu: Cpu -> }
         op[0xC3] = Opcode("JP u16", 3, 16) {cpu: Cpu -> }
@@ -224,7 +224,7 @@ class Opcodes {
         op[0xC5] = Opcode("PUSH BC", 1, 16) {cpu: Cpu -> }
         op[0xC6] = Opcode("ADD A,u8", 2, 8) {cpu: Cpu -> cpu.add_a_r8(Register.u8)}
         op[0xC7] = Opcode("RST 00h", 1, 16) {cpu: Cpu -> }
-        op[0xC8] = Opcode("RET Z", 1, 20) {cpu: Cpu -> }
+        op[0xC8] = Opcode("RET Z", 1, 20) {cpu: Cpu -> cpu.retc(Condition.Z)}
         op[0xC9] = Opcode("RET", 1, 16) {cpu: Cpu -> }
         op[0xCA] = Opcode("JP Z,u16", 3, 16) {cpu: Cpu -> }
         op[0xCB] = Opcode("PREFIX CB", 1, 4) {cpu: Cpu -> }
@@ -233,7 +233,7 @@ class Opcodes {
         op[0xCE] = Opcode("ADC A,u8", 2, 8) {cpu: Cpu -> cpu.addc_a_r8(Register.u8)}
         op[0xCF] = Opcode("RST 08h", 1, 16) {cpu: Cpu -> }
 
-        op[0xD0] = Opcode("RET NC", 1, 20) {cpu: Cpu -> }
+        op[0xD0] = Opcode("RET NC", 1, 20) {cpu: Cpu -> cpu.retc(Condition.NC)}
         op[0xD1] = Opcode("POP DE", 1, 12) {cpu: Cpu -> }
         op[0xD2] = Opcode("JP NC,u16", 3, 16) {cpu: Cpu -> }
         op[0xD3] = Opcode("UNUSED", 1, 0) {cpu: Cpu -> }
@@ -241,7 +241,7 @@ class Opcodes {
         op[0xD5] = Opcode("PUSH DE", 1, 16) {cpu: Cpu -> }
         op[0xD6] = Opcode("SUB A,u8", 2, 8) {cpu: Cpu -> cpu.sub_a_r8(Register.u8)}
         op[0xD7] = Opcode("RST 10h", 1, 16) {cpu: Cpu -> }
-        op[0xD8] = Opcode("RET C", 1, 20) {cpu: Cpu -> }
+        op[0xD8] = Opcode("RET C", 1, 20) {cpu: Cpu -> cpu.retc(Condition.C)}
         op[0xD9] = Opcode("RETI", 1, 16) {cpu: Cpu -> }
         op[0xDA] = Opcode("JP C,u16", 3, 16) {cpu: Cpu -> }
         op[0xDB] = Opcode("UNUSED", 1, 0) {cpu: Cpu -> }

@@ -239,6 +239,16 @@ class Cpu {
         registers.halfcarry = a and 0xfu < src and 0xfu
     }
 
+    /**
+     * Name: RET C
+     * Description: Return conditionally
+     */
+    fun retc(cond: Condition) {
+        if(registers.checkCondition(cond)) {
+            val address: UShort = popShort()
+            registers.pc = address
+        }
+    }
 
     /**
      * Get an 8-bit value from register
@@ -266,6 +276,41 @@ class Cpu {
      */
     fun increase_pc(num: Int) {
         registers.pc = (registers.pc + num.toUInt()).toUShort()
+    }
+
+
+    /**
+     * Read 8-bit value from memory at stack pointer and increment
+     */
+    fun popByte(): UByte {
+        val output = readByte(registers.sp)
+        registers.sp++
+        return output
+    }
+
+    /**
+     * Decrement stack pointer and write [value] at stack pointer
+     */
+    fun pushByte(value: UByte) {
+        registers.sp--
+        writeByte(registers.sp, value)
+    }
+
+    /**
+     * Read 16-bit value from memory at stack pointer and increment
+     */
+    fun popShort(): UShort {
+        val out1 = popByte()
+        val out2 = popByte()
+        return out1.combine(out2)
+    }
+
+    /**
+     * Decrement stack pointer and write 16-bit [value] at stack pointer
+     */
+    fun pushShort(value: UShort) {
+        pushByte(value.high)
+        pushByte(value.low)
     }
 
     /**

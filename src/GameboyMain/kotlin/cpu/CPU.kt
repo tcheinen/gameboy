@@ -119,6 +119,21 @@ class Cpu {
     }
 
     /**
+     * Name: ADD HL, r16
+     * Description: Add 16 bit register [reg] to HL and store the result in HL
+     * Half Carry is set if there is a carry between bits 11 and 12
+     */
+    fun add_hl_r16(reg: Register) {
+        val src: UShort = registers.getr16(reg)
+        val result: UShort = (registers.hl + src).toUShort()
+
+        registers.addsub = false
+        registers.halfcarry = ((registers.hl and 0xFFFu) + (src and 0xFFFu)) and 0x1000u == 0x1000u
+        registers.carry = result < registers.hl
+        registers.hl = result
+    }
+
+    /**
      * Name: LD r8,r8
      * Description: Copy 8-bit register [src] to [dest]
      */

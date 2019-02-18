@@ -21,7 +21,7 @@ class Opcodes {
         op[0x6] = Opcode("LD B,u8", 2, 8) {cpu: Cpu -> cpu.ld_r8_u8(Register.B)}
         op[0x7] = Opcode("RLCA", 1, 4) {cpu: Cpu -> cpu.rlc(Register.A)}
         op[0x8] = Opcode("LD (u16),SP", 3, 20) {cpu: Cpu -> }
-        op[0x9] = Opcode("ADD HL,BC", 1, 8) {cpu: Cpu -> }
+        op[0x9] = Opcode("ADD HL,BC", 1, 8) {cpu: Cpu -> cpu.add_hl_r16(Register.BC)}
         op[0xA] = Opcode("LD A,(BC)", 1, 8) {cpu: Cpu -> cpu.ld_r8_r8(Register.A, Register.BC)}
         op[0xB] = Opcode("DEC BC", 1, 8) {cpu: Cpu -> cpu.dec_r16(Register.BC)}
         op[0xC] = Opcode("INC C", 1, 4) {cpu: Cpu -> cpu.inc_r8(Register.C)}
@@ -38,7 +38,7 @@ class Opcodes {
         op[0x16] = Opcode("LD D,u8", 2, 8) {cpu: Cpu -> cpu.ld_r8_u8(Register.D)}
         op[0x17] = Opcode("RLA", 1, 4) {cpu: Cpu -> }
         op[0x18] = Opcode("JR i8", 2, 12) {cpu: Cpu -> }
-        op[0x19] = Opcode("ADD HL,DE", 1, 8) {cpu: Cpu -> }
+        op[0x19] = Opcode("ADD HL,DE", 1, 8) {cpu: Cpu -> cpu.add_hl_r16(Register.DE)}
         op[0x1A] = Opcode("LD A,(DE)", 1, 8) {cpu: Cpu -> cpu.ld_r8_r8(Register.A, Register.DE)}
         op[0x1B] = Opcode("DEC DE", 1, 8) {cpu: Cpu -> cpu.dec_r16(Register.DE)}
         op[0x1C] = Opcode("INC E", 1, 4) {cpu: Cpu -> cpu.inc_r8(Register.E)}
@@ -55,7 +55,7 @@ class Opcodes {
         op[0x26] = Opcode("LD H,u8", 2, 8) {cpu: Cpu -> cpu.ld_r8_u8(Register.H)}
         op[0x27] = Opcode("DAA", 1, 4) {cpu: Cpu -> }
         op[0x28] = Opcode("JR Z,i8", 2, 12) {cpu: Cpu -> }
-        op[0x29] = Opcode("ADD HL,HL", 1, 8) {cpu: Cpu -> }
+        op[0x29] = Opcode("ADD HL,HL", 1, 8) {cpu: Cpu -> cpu.add_hl_r16(Register.HL)}
         op[0x2A] = Opcode("LD A,(HL+)", 1, 8) {cpu: Cpu -> }
         op[0x2B] = Opcode("DEC HL", 1, 8) {cpu: Cpu -> cpu.dec_r16(Register.HL)}
         op[0x2C] = Opcode("INC L", 1, 4) {cpu: Cpu -> cpu.inc_r8(Register.L)}
@@ -72,7 +72,7 @@ class Opcodes {
         op[0x36] = Opcode("LD (HL),u8", 2, 12) {cpu: Cpu -> }
         op[0x37] = Opcode("SCF", 1, 4) {cpu: Cpu -> }
         op[0x38] = Opcode("JR C,i8", 2, 12) {cpu: Cpu -> }
-        op[0x39] = Opcode("ADD HL,SP", 1, 8) {cpu: Cpu -> }
+        op[0x39] = Opcode("ADD HL,SP", 1, 8) {cpu: Cpu -> cpu.add_hl_r16(Register.SP)}
         op[0x3A] = Opcode("LD A,(HL-)", 1, 8) {cpu: Cpu -> }
         op[0x3B] = Opcode("DEC SP", 1, 8) {cpu: Cpu -> cpu.dec_r16(Register.SP)}
         op[0x3C] = Opcode("INC A", 1, 4) {cpu: Cpu -> cpu.inc_r8(Register.A)}

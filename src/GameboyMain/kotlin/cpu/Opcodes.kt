@@ -20,14 +20,14 @@ class Opcodes {
         op[0x5] = Opcode("DEC B", 1, 4) {cpu: Cpu -> cpu.dec_r8(Register.B)}
         op[0x6] = Opcode("LD B,u8", 2, 8) {cpu: Cpu -> cpu.ld_r8_u8(Register.B)}
         op[0x7] = Opcode("RLCA", 1, 4) {cpu: Cpu -> cpu.rlc(Register.A)}
-        op[0x8] = Opcode("LD (u16),SP", 3, 20) {cpu: Cpu -> }
+        op[0x8] = Opcode("LD (u16),SP", 3, 20) {cpu: Cpu -> cpu.ld_u16_sp()}
         op[0x9] = Opcode("ADD HL,BC", 1, 8) {cpu: Cpu -> cpu.add_hl_r16(Register.BC)}
         op[0xA] = Opcode("LD A,(BC)", 1, 8) {cpu: Cpu -> cpu.ld_r8_r8(Register.A, Register.BC)}
         op[0xB] = Opcode("DEC BC", 1, 8) {cpu: Cpu -> cpu.dec_r16(Register.BC)}
         op[0xC] = Opcode("INC C", 1, 4) {cpu: Cpu -> cpu.inc_r8(Register.C)}
         op[0xD] = Opcode("DEC C", 1, 4) {cpu: Cpu -> cpu.dec_r8(Register.C)}
         op[0xE] = Opcode("LD C,u8", 2, 8) {cpu: Cpu -> cpu.ld_r8_u8(Register.C)}
-        op[0xF] = Opcode("RRCA", 1, 4) {cpu: Cpu -> }
+        op[0xF] = Opcode("RRCA", 1, 4) {cpu: Cpu -> cpu.rrc(Register.A)}
 
         op[0x10] = Opcode("STOP", 2, 4) {cpu: Cpu -> }
         op[0x11] = Opcode("LD DE,u16", 3, 12) {cpu: Cpu -> cpu.ld_r16_u16(Register.DE)}

@@ -119,6 +119,27 @@ class Cpu {
     }
 
     /**
+     * Name: RRC r8
+     * Description: Rotate Right Circular for register [reg]
+     * Sets [reg] to (A shr 1) or (A shl 7)
+     * If bit 0 is set, set carry.  Otherwise reset.  All other flags are reset
+     */
+    fun rrc(reg: Register) {
+        registers.f.clear()
+        registers.carry = (registers.a and 0x1u) == 0x1u.toUByte()
+        registers.setr8(reg, (registers.getr8(reg) shr 1) or (registers.getr8(reg) shl 7))
+    }
+
+    /**
+     * Name: LD (u16),SP
+     * Description: Write SP into the address pointed to by 16-bit value pointed to by PC
+     */
+    fun ld_u16_sp() {
+        val address: UShort = readShort(registers.pc)
+        writeShort(address, registers.sp)
+    }
+
+    /**
      * Name: ADD HL, r16
      * Description: Add 16 bit register [reg] to HL and store the result in HL
      * Half Carry is set if there is a carry between bits 11 and 12

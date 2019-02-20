@@ -245,6 +245,17 @@ class Cpu {
         registers.halfcarry = false
         registers.carry = !registers.carry
     }
+
+
+    /**
+     * Name: POP r16
+     * Description: Read two bytes from stack onto [reg] and increment stack pointer twice
+     */
+    fun pop(reg: Register) {
+        val value: UShort = readShort(registers.sp)
+        registers.setr16(reg, value)
+        registers.sp = (registers.sp + 2u).toUShort()
+    }
     /**
      * Name: ADD A,r8
      * Description: Add [reg] to A and then store result in A

@@ -137,7 +137,7 @@ class Opcodes {
         op[0x73] = Opcode("LD (HL),E", 1, 8) {cpu: Cpu -> cpu.ld_r16_r8(Register.HL, Register.E)}
         op[0x74] = Opcode("LD (HL),H", 1, 8) {cpu: Cpu -> cpu.ld_r16_r8(Register.HL, Register.H)}
         op[0x75] = Opcode("LD (HL),L", 1, 8) {cpu: Cpu -> cpu.ld_r16_r8(Register.HL, Register.L)}
-        op[0x76] = Opcode("HALT", 1, 4) {cpu: Cpu -> }
+        op[0x76] = Opcode("HALT", 1, 4) {cpu: Cpu -> cpu.halt()}
         op[0x77] = Opcode("LD (HL),A", 1, 8) {cpu: Cpu -> cpu.ld_r16_r8(Register.HL, Register.A)}
         op[0x78] = Opcode("LD A,B", 1, 4) {cpu: Cpu -> cpu.ld_r8_r8(Register.A, Register.B)}
         op[0x79] = Opcode("LD A,C", 1, 4) {cpu: Cpu -> cpu.ld_r8_r8(Register.A, Register.C)}
@@ -217,7 +217,7 @@ class Opcodes {
         op[0xBF] = Opcode("CP A,A", 1, 4) {cpu: Cpu -> cpu.cp_a_r8(Register.A)}
 
         op[0xC0] = Opcode("RET NZ", 1, 20) {cpu: Cpu -> cpu.retc(Condition.NZ)}
-        op[0xC1] = Opcode("POP BC", 1, 12) {cpu: Cpu -> }
+        op[0xC1] = Opcode("POP BC", 1, 12) {cpu: Cpu -> cpu.pop(Register.BC)}
         op[0xC2] = Opcode("JP NZ,u16", 3, 16) {cpu: Cpu -> }
         op[0xC3] = Opcode("JP u16", 3, 16) {cpu: Cpu -> }
         op[0xC4] = Opcode("CALL NZ,u16", 3, 24) {cpu: Cpu -> }
@@ -234,7 +234,7 @@ class Opcodes {
         op[0xCF] = Opcode("RST 08h", 1, 16) {cpu: Cpu -> }
 
         op[0xD0] = Opcode("RET NC", 1, 20) {cpu: Cpu -> cpu.retc(Condition.NC)}
-        op[0xD1] = Opcode("POP DE", 1, 12) {cpu: Cpu -> }
+        op[0xD1] = Opcode("POP DE", 1, 12) {cpu: Cpu -> cpu.pop(Register.DE)}
         op[0xD2] = Opcode("JP NC,u16", 3, 16) {cpu: Cpu -> }
         op[0xD3] = Opcode("UNUSED", 1, 0) {cpu: Cpu -> }
         op[0xD4] = Opcode("CALL NC,u16", 3, 24) {cpu: Cpu -> }
@@ -251,7 +251,7 @@ class Opcodes {
         op[0xDF] = Opcode("RST 18h", 1, 16) {cpu: Cpu -> }
 
         op[0xE0] = Opcode("LD (FF00+u8),A", 2, 12) {cpu: Cpu -> }
-        op[0xE1] = Opcode("POP HL", 1, 12) {cpu: Cpu -> }
+        op[0xE1] = Opcode("POP HL", 1, 12) {cpu: Cpu -> cpu.pop(Register.HL)}
         op[0xE2] = Opcode("LD (FF00+C),A", 1, 8) {cpu: Cpu -> }
         op[0xE3] = Opcode("UNUSED", 1, 0) {cpu: Cpu -> }
         op[0xE4] = Opcode("UNUSED", 1, 0) {cpu: Cpu -> }
@@ -268,7 +268,7 @@ class Opcodes {
         op[0xEF] = Opcode("RST 28h", 1, 16) {cpu: Cpu -> }
 
         op[0xF0] = Opcode("LD A,(FF00+u8)", 2, 12) {cpu: Cpu -> }
-        op[0xF1] = Opcode("POP AF", 1, 12) {cpu: Cpu -> }
+        op[0xF1] = Opcode("POP AF", 1, 12) {cpu: Cpu -> cpu.pop(Register.AF)}
         op[0xF2] = Opcode("LD A,(FF00+C)", 1, 8) {cpu: Cpu -> }
         op[0xF3] = Opcode("DI", 1, 4) {cpu: Cpu -> }
         op[0xF4] = Opcode("UNUSED", 1, 0) {cpu: Cpu -> }

@@ -1,3 +1,5 @@
+package com.teddyheinen
+
 data class MMU(val rom0: ByteArray = ByteArray(16384),
                val rom1: ByteArray = ByteArray(16384),
                val vram: ByteArray = ByteArray(8192),
@@ -5,4 +7,11 @@ data class MMU(val rom0: ByteArray = ByteArray(16384),
                val wram2: ByteArray = ByteArray(4096),
                val oam: ByteArray = ByteArray(160), // is this the right size?
                val hram: ByteArray = ByteArray(128)
-)
+) {
+    fun readRomBank0(addr: UShort) {
+
+    }
+    fun writeRomBank0(addr: UShort, value: Byte) {
+
+    }
+}

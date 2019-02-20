@@ -1,5 +1,6 @@
 package cpu
 
+import com.teddyheinen.MMU
 import combine
 import high
 import kotlinx.cinterop.toByte
@@ -14,7 +15,7 @@ import shr
 class Cpu {
 
     private var registers: Registers = Registers()
-
+    private var mmu: MMU = MMU()
     var status: State = State.Okay
     var ime: Boolean = false
     /**
@@ -373,7 +374,6 @@ class Cpu {
     /**
      * Name: DAA
      * Description: Decimal adjust A
-     * It has something to do with BCD math
      */
     fun daa() {
 
@@ -682,6 +682,7 @@ class Cpu {
         increase_pc(4)
         when (address.toInt()) {
             in 0x0000..0x3FFF -> {
+                mmu.readRomBank0(address)
             } // rom bank 0
             in 0x4000..0x7FFF -> {
             } // rom bank 1

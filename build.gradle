@@ -25,7 +25,8 @@ kotlin {
         // For MacOS, preset should be changed to e.g. presets.macosX64
         fromPreset(presets.mingwX64, 'Gameboy')
         configure([Gameboy]) {
-            compilations.main.outputKinds = [DYNAMIC]
+            compilations.main.outputKinds = [EXECUTABLE, DYNAMIC]
+            compilations.main.entryPoint 'com.teddyheinen.gameboy.main' 
         }
     }
 

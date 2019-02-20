@@ -205,6 +205,13 @@ class Cpu {
     }
 
     /**
+     * Name: JP HL
+     * Description: Jump to HL
+     */
+    fun jphl() {
+        registers.pc = registers.hl
+    }
+    /**
      * Name: RET
      * Description: Pop short from stack and then jump to it
      * Interrupt if [reti] is true

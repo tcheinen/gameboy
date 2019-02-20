@@ -259,7 +259,7 @@ class Opcodes {
         op[0xE6] = Opcode("AND A,u8", 2, 8) {cpu: Cpu -> cpu.and_a_r8(Register.u8)}
         op[0xE7] = Opcode("RST 20h", 1, 16) {cpu: Cpu -> cpu.rst(0x20u)}
         op[0xE8] = Opcode("ADD SP,i8", 2, 16) {cpu: Cpu -> }
-        op[0xE9] = Opcode("JP HL", 1, 4) {cpu: Cpu -> }
+        op[0xE9] = Opcode("JP HL", 1, 4) {cpu: Cpu -> cpu.jphl()}
         op[0xEA] = Opcode("LD (u16),A", 3, 16) {cpu: Cpu -> }
         op[0xEB] = Opcode("UNUSED", 1, 0) {cpu: Cpu -> }
         op[0xEC] = Opcode("UNUSED", 1, 0) {cpu: Cpu -> }

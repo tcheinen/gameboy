@@ -265,6 +265,42 @@ class Cpu {
     }
 
     /**
+     * Name: LDH n,r8
+     * Description: Write [reg] to FF00 + u8
+     */
+    fun ldh_u8_r8(reg: Register) {
+        val address: UShort = (0xFF00u or readByte(registers.pc).toUInt()).toUShort()
+        writeByte(address, registers.getr8(reg))
+    }
+
+    /**
+    * Name: LDH c,r8
+    * Description: Write [reg] to FF00 + C
+    */
+    fun ldh_c_r8(reg: Register) {
+        val address: UShort = (0xFF00u or registers.c.toUInt()).toUShort()
+        writeByte(address, registers.getr8(reg))
+    }
+
+    /**
+     * Name: LDH r8,n
+     * Description: Write FF00 + u8 to [reg]
+     */
+    fun ldh_r8_u8(reg: Register) {
+        val address: UShort = (0xFF00u or readByte(registers.pc).toUInt()).toUShort()
+        registers.setr8(reg, readByte(address))
+    }
+
+    /**
+     * Name: LDH r8,c
+     * Description: Write FF00 + C to [reg]
+     */
+    fun ldh_r8_c(reg: Register) {
+        val address: UShort = (0xFF00u or registers.c.toUInt()).toUShort()
+        registers.setr8(reg, readByte(address))
+    }
+
+    /**
      * Name: SCF
      * Description: Set Carry Flag
      */

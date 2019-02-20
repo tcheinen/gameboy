@@ -55,6 +55,27 @@ class Cpu {
         }
         writeByte(address,  registers.getr8(reg8))
     }
+    /**
+     * Name: LD r8,(r16)
+     * Description: Set [reg8] to the memory referenced by [reg16]
+     * Increment HL if [reg16] is HL and decrement HL if [reg16] is SP
+     */
+    fun ld_r8_r16(reg8: Register, reg16: Register) {
+        val address: UShort = when (reg16) {
+            Register.BC -> registers.bc
+            Register.DE -> registers.de
+            Register.HL -> {
+                registers.hl
+                registers.hl++
+            }
+            Register.SP -> {
+                registers.hl
+                registers.hl--
+            }
+            else -> 0u // should never happen
+        }
+        registers.setr8(reg8, readByte(address))
+    }
 
     /**
      * Name: INC r16
@@ -95,15 +116,9 @@ class Cpu {
      */
     fun ld_r8_u8(reg: Register) {
         val value: UByte = readByte(registers.pc)
-        when (reg) {
-            Register.A -> registers.a = value
-            Register.B -> registers.b = value
-            Register.C -> registers.c = value
-            Register.D -> registers.d = value
-            Register.E -> registers.e = value
-            Register.H -> registers.h = value
-            Register.L -> registers.l = value
-            else -> {} // should never happen
+        when(reg) {
+            Register.HL -> writeByte(registers.hl, value)
+            else -> registers.setr8(reg,value)
         }
     }
 
@@ -211,6 +226,25 @@ class Cpu {
         registers.setr8(dest, value)
     }
 
+    /**
+     * Name: SCF
+     * Description: Set Carry Flag
+     */
+    fun scf() {
+        registers.addsub = false
+        registers.halfcarry = false
+        registers.carry = true
+    }
+
+    /**
+     * Name: CCF
+     * Description: Invert (compliment) Carry Flag
+     */
+    fun ccf() {
+        registers.addsub = false
+        registers.halfcarry = false
+        registers.carry = !registers.carry
+    }
     /**
      * Name: ADD A,r8
      * Description: Add [reg] to A and then store result in A

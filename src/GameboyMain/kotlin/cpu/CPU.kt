@@ -263,9 +263,17 @@ class Cpu {
      * Description: Read two bytes from stack onto [reg] and increment stack pointer twice
      */
     fun pop(reg: Register) {
-        val value: UShort = readShort(registers.sp)
+        val value: UShort = popShort()
         registers.setr16(reg, value)
-        registers.sp = (registers.sp + 2u).toUShort()
+    }
+
+    /**
+     * Name: PUSH r16
+     * Description: Write from [reg] onto stack and decrement stack pointer twice
+     */
+    fun push(reg: Register) {
+        val value: UShort = registers.getr16(reg)
+        pushShort(value)
     }
     /**
      * Name: ADD A,r8

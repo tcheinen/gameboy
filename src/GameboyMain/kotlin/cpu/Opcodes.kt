@@ -258,9 +258,9 @@ class Opcodes {
         op[0xE5] = Opcode("PUSH HL", 1, 16) {cpu: Cpu -> cpu.push(Register.HL)}
         op[0xE6] = Opcode("AND A,u8", 2, 8) {cpu: Cpu -> cpu.and_a_r8(Register.u8)}
         op[0xE7] = Opcode("RST 20h", 1, 16) {cpu: Cpu -> cpu.rst(0x20u)}
-        op[0xE8] = Opcode("ADD SP,i8", 2, 16) {cpu: Cpu -> }
+        op[0xE8] = Opcode("ADD SP,i8", 2, 16) {cpu: Cpu -> cpu.add_sp_u8()}
         op[0xE9] = Opcode("JP HL", 1, 4) {cpu: Cpu -> cpu.jphl()}
-        op[0xEA] = Opcode("LD (u16),A", 3, 16) {cpu: Cpu -> }
+        op[0xEA] = Opcode("LD (u16),A", 3, 16) {cpu: Cpu -> cpu.ld_u16_r8(Register.A)}
         op[0xEB] = Opcode("UNUSED", 1, 0) {cpu: Cpu -> }
         op[0xEC] = Opcode("UNUSED", 1, 0) {cpu: Cpu -> }
         op[0xED] = Opcode("UNUSED", 1, 0) {cpu: Cpu -> }
@@ -270,7 +270,7 @@ class Opcodes {
         op[0xF0] = Opcode("LD A,(FF00+u8)", 2, 12) {cpu: Cpu -> cpu.ldh_r8_u8(Register.A)}
         op[0xF1] = Opcode("POP AF", 1, 12) {cpu: Cpu -> cpu.pop(Register.AF)}
         op[0xF2] = Opcode("LD A,(FF00+C)", 1, 8) {cpu: Cpu -> cpu.ldh_r8_c(Register.A)}
-        op[0xF3] = Opcode("DI", 1, 4) {cpu: Cpu -> }
+        op[0xF3] = Opcode("DI", 1, 4) {cpu: Cpu -> cpu.di()}
         op[0xF4] = Opcode("UNUSED", 1, 0) {cpu: Cpu -> }
         op[0xF5] = Opcode("PUSH AF", 1, 16) {cpu: Cpu -> cpu.push(Register.AF)}
         op[0xF6] = Opcode("OR A,u8", 2, 8) {cpu: Cpu -> cpu.or_a_r8(Register.u8)}
@@ -278,7 +278,7 @@ class Opcodes {
         op[0xF8] = Opcode("LD HL,SP+i8", 2, 12) {cpu: Cpu -> }
         op[0xF9] = Opcode("LD SP,HL", 1, 8) {cpu: Cpu -> }
         op[0xFA] = Opcode("LD A,(u16)", 3, 16) {cpu: Cpu -> }
-        op[0xFB] = Opcode("EI", 1, 4) {cpu: Cpu -> }
+        op[0xFB] = Opcode("EI", 1, 4) {cpu: Cpu -> cpu.ei()}
         op[0xFC] = Opcode("UNUSED", 1, 0) {cpu: Cpu -> }
         op[0xFD] = Opcode("UNUSED", 1, 0) {cpu: Cpu -> }
         op[0xFE] = Opcode("CP A,u8", 2, 8) {cpu: Cpu -> cpu.cp_a_r8(Register.u8)}

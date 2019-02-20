@@ -301,6 +301,16 @@ class Cpu {
     }
 
     /**
+     * Name: LD (u16),r8
+     * Description: Write 8-bit [reg] to memory at the address specified by memory at PC
+     */
+    fun ld_u16_r8(reg: Register) {
+        val value: UByte = registers.getr8(reg)
+        val addr: UShort = readShort(registers.pc)
+        writeByte(addr, value)
+    }
+
+    /**
      * Name: SCF
      * Description: Set Carry Flag
      */
@@ -350,6 +360,20 @@ class Cpu {
         registers.halfcarry = (((registers.a and 0xfu) + 1u) and 0x10u) == 0x10u
         registers.carry = result < registers.a
         registers.a = result
+    }
+
+    /**
+     * Name: ADD SP,n
+     * Description: Add byte from PC location to SP
+     */
+    fun add_sp_u8() {
+        val src = readByte(registers.pc)
+        val result = (registers.a + src).toUShort()
+        registers.addsub = false
+        registers.zero = false
+        registers.halfcarry =  ((registers.sp and 0x0Fu) + (src and 0x0Fu)) > 0x0Fu
+        registers.carry = ((registers.sp and 0xFFu) + (src and 0xFFu)) > 0xFFu
+        registers.sp = result
     }
 
     /**
@@ -473,6 +497,23 @@ class Cpu {
             status = State.Halt
         }
     }
+
+    /**
+     * Name: DI
+     * Description: Disables IME flag
+     */
+    fun di() {
+        ime = false
+    }
+
+    /**
+     * Name: EI
+     * Description: Enables IME flag
+     */
+    fun ei() {
+        ime = true
+    }
+
     /**
      * Name: STOP
      * Description: Stops execution

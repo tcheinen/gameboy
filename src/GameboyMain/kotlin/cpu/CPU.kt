@@ -216,6 +216,15 @@ class Cpu {
     }
 
     /**
+     * Name: RST
+     * Description: Push PC onto stack and then jump to [addr]
+     */
+    fun rst(addr: UShort) {
+        pushShort(registers.pc)
+        registers.pc = addr
+    }
+
+    /**
      * Name: LD (u16),SP
      * Description: Write SP into the address pointed to by 16-bit value pointed to by PC
      */

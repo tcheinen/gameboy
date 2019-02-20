@@ -30,7 +30,8 @@ class Cpu {
             Register.BC -> registers.bc = value
             Register.DE -> registers.de = value
             Register.HL -> registers.hl = value
-            else -> {} // should never happen
+            else -> {
+            } // should never happen
         }
     }
 
@@ -53,8 +54,9 @@ class Cpu {
             }
             else -> 0u // should never happen
         }
-        writeByte(address,  registers.getr8(reg8))
+        writeByte(address, registers.getr8(reg8))
     }
+
     /**
      * Name: LD r8,(r16)
      * Description: Set [reg8] to the memory referenced by [reg16]
@@ -82,8 +84,9 @@ class Cpu {
      * Description: Increment 16-bit register [reg]
      */
     fun inc_r16(reg: Register) {
-        registers.setr16(reg, (registers.getr16(reg)+1u).toUShort())
+        registers.setr16(reg, (registers.getr16(reg) + 1u).toUShort())
     }
+
     /**
      * Name: INC r8
      * Description: Increment 16-bit register [reg]
@@ -93,7 +96,7 @@ class Cpu {
         registers.addsub = false
         registers.zero = (currentValue == (0xffu).toUByte())
         registers.halfcarry = (((currentValue and 0xfu) + 1u) and 0x10u) == 0x10u
-        registers.setr8(reg, (registers.getr8(reg)+1u).toUByte())
+        registers.setr8(reg, (registers.getr8(reg) + 1u).toUByte())
     }
 
     /**
@@ -101,24 +104,26 @@ class Cpu {
      * Description: Decrement 16-bit register [reg]
      */
     fun dec_r16(reg: Register) {
-        registers.setr16(reg, (registers.getr16(reg)-1u).toUShort())
+        registers.setr16(reg, (registers.getr16(reg) - 1u).toUShort())
     }
+
     /**
      * Name: DEC r8
      * Description: Decrement 16-bit register [reg]
      */
     fun dec_r8(reg: Register) {
-        registers.setr8(reg, (registers.getr8(reg)-1u).toUByte())
+        registers.setr8(reg, (registers.getr8(reg) - 1u).toUByte())
     }
+
     /**
      * Name: LD r8, u8
      * Description: Set an 8 bit register to a bytes read from memory at the program counter
      */
     fun ld_r8_u8(reg: Register) {
         val value: UByte = readByte(registers.pc)
-        when(reg) {
+        when (reg) {
             Register.HL -> writeByte(registers.hl, value)
-            else -> registers.setr8(reg,value)
+            else -> registers.setr8(reg, value)
         }
     }
 
@@ -176,7 +181,7 @@ class Cpu {
      * Description: One's Complement of [reg]
      */
     fun cpl(reg: Register) {
-        registers.setr8(reg,registers.getr8(reg).inv())
+        registers.setr8(reg, registers.getr8(reg).inv())
         registers.addsub = true
         registers.halfcarry = true
     }
@@ -188,7 +193,7 @@ class Cpu {
      */
     fun jr(condition: Condition) {
         val value: UByte = readByte(registers.pc)
-        if(registers.checkCondition(condition)) {
+        if (registers.checkCondition(condition)) {
             registers.pc = (registers.pc + value).toUShort()
         }
     }
@@ -199,7 +204,7 @@ class Cpu {
      */
     fun jpc(condition: Condition) {
         val value: UShort = readShort(registers.pc)
-        if(registers.checkCondition(condition)) {
+        if (registers.checkCondition(condition)) {
             registers.pc = value
         }
     }
@@ -211,6 +216,7 @@ class Cpu {
     fun jphl() {
         registers.pc = registers.hl
     }
+
     /**
      * Name: RET
      * Description: Pop short from stack and then jump to it
@@ -274,9 +280,9 @@ class Cpu {
     }
 
     /**
-    * Name: LDH c,r8
-    * Description: Write [reg] to FF00 + C
-    */
+     * Name: LDH c,r8
+     * Description: Write [reg] to FF00 + C
+     */
     fun ldh_c_r8(reg: Register) {
         val address: UShort = (0xFF00u or registers.c.toUInt()).toUShort()
         writeByte(address, registers.getr8(reg))
@@ -348,6 +354,7 @@ class Cpu {
         val value: UShort = registers.getr16(reg)
         pushShort(value)
     }
+
     /**
      * Name: ADD A,r8
      * Description: Add [reg] to A and then store result in A
@@ -362,6 +369,16 @@ class Cpu {
         registers.a = result
     }
 
+
+    /**
+     * Name: DAA
+     * Description: Decimal adjust A
+     * It has something to do with BCD math
+     */
+    fun daa() {
+
+    }
+
     /**
      * Name: ADD SP,n
      * Description: Add byte from PC location to SP
@@ -371,7 +388,7 @@ class Cpu {
         val result = (registers.a + src).toUShort()
         registers.addsub = false
         registers.zero = false
-        registers.halfcarry =  ((registers.sp and 0x0Fu) + (src and 0x0Fu)) > 0x0Fu
+        registers.halfcarry = ((registers.sp and 0x0Fu) + (src and 0x0Fu)) > 0x0Fu
         registers.carry = ((registers.sp and 0xFFu) + (src and 0xFFu)) > 0xFFu
         registers.sp = result
     }
@@ -382,7 +399,7 @@ class Cpu {
      *
      */
     fun addc_a_r8(reg: Register) {
-        val carry: UInt = if(registers.carry) 1u else 0u
+        val carry: UInt = if (registers.carry) 1u else 0u
         val src = get_u8_register(reg)
         val result = (registers.a + src + carry).toUByte()
         registers.addsub = false
@@ -412,7 +429,7 @@ class Cpu {
      */
     fun subc_a_r8(reg: Register) {
         val src = get_u8_register(reg)
-        val carry: UInt = if(registers.carry) 1u else 0u
+        val carry: UInt = if (registers.carry) 1u else 0u
         val result = (registers.a - src - carry).toUByte()
         registers.addsub = true
         registers.zero = result == 0.toUByte()
@@ -448,6 +465,7 @@ class Cpu {
         registers.halfcarry = false
         registers.a = result
     }
+
     /**
      * Name: OR A,r8
      * Description: Bitwise OR between [reg] with A and then store in A
@@ -480,7 +498,7 @@ class Cpu {
      * Description: Return conditionally
      */
     fun retc(cond: Condition) {
-        if(registers.checkCondition(cond)) {
+        if (registers.checkCondition(cond)) {
             val address: UShort = popShort()
             registers.pc = address
         }
@@ -493,7 +511,7 @@ class Cpu {
      */
     fun halt() {
         // TODO im pretty sure theres another condition
-        if(ime) {
+        if (ime) {
             status = State.Halt
         }
     }
@@ -529,7 +547,7 @@ class Cpu {
      */
     fun call(cond: Condition) {
         val addr: UShort = readShort(registers.pc)
-        if(registers.checkCondition(cond)) {
+        if (registers.checkCondition(cond)) {
             val pc: UShort = registers.pc
             pushShort(pc)
             registers.pc = addr
@@ -541,7 +559,7 @@ class Cpu {
      * Value will be the contents of an 8-bit register or a byte at the memory address stored in a 16-bit register
      */
     fun get_u8_register(reg: Register): UByte {
-        return when(reg) {
+        return when (reg) {
             Register.A -> registers.a
             Register.B -> registers.b
             Register.C -> registers.c
@@ -555,6 +573,36 @@ class Cpu {
             else -> 0u // should not happen
         }
 
+    }
+
+    /**
+     * Name: LD HL, SP+n
+     * Description: Loads SP + byte from memory at pc into HL
+     */
+    fun ld_hl_sp() {
+        val n: UByte = readByte(registers.pc)
+        val result: UShort = (registers.sp + n).toUShort()
+        registers.f.clear()
+        registers.halfcarry = (registers.sp and 0x0Fu) + (n and 0x0Fu) > 0x0Fu
+        registers.carry = (registers.sp and 0xFFu) + (n and 0xFFu) > 0xFFu
+    }
+
+    /**
+     * Name: LD SP,HL
+     * Description: Load HL into SP
+     */
+    fun ld_sp_hl() {
+        registers.sp = registers.hl
+    }
+
+    /**
+     * Name: LD r8,u16
+     * Description: Read 8-bit value that PC points to into [reg]
+     */
+    fun ld_r8_u16(reg: Register) {
+        val address: UShort = readShort(registers.pc)
+        val n: UByte = readByte(address)
+        registers.setr8(reg, n)
     }
 
     /**

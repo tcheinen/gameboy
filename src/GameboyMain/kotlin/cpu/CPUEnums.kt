@@ -4,7 +4,8 @@ enum class Condition {
     Z,
     NZ,
     C,
-    NC
+    NC,
+    TRUE // Always evaluates to true
 }
 
 enum class State {

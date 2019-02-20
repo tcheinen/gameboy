@@ -2,6 +2,7 @@ package cpu
 
 import combine
 import high
+import kotlinx.cinterop.toByte
 import low
 import shl
 import shr
@@ -109,25 +110,72 @@ class Cpu {
     /**
      * Name: RLC r8
      * Description: Rotate Left Circular for register [reg]
-     * Sets [reg] to (A shl 1) or (A shr 7)
+     * Sets [reg] to ([reg] shl 1) or ([reg] shr 7)
      * If bit 7 is set, set carry.  Otherwise reset.  All other flags are reset
      */
     fun rlc(reg: Register) {
         registers.f.clear()
-        registers.carry = registers.a >= 0x80u
         registers.setr8(reg, (registers.getr8(reg) shl 1) or (registers.getr8(reg) shr 7))
+        registers.carry = registers.a >= 0x80u
     }
 
     /**
      * Name: RRC r8
      * Description: Rotate Right Circular for register [reg]
-     * Sets [reg] to (A shr 1) or (A shl 7)
+     * Sets [reg] to ([reg] shr 1) or ([reg] shl 7)
      * If bit 0 is set, set carry.  Otherwise reset.  All other flags are reset
      */
     fun rrc(reg: Register) {
         registers.f.clear()
-        registers.carry = (registers.a and 0x1u) == 0x1u.toUByte()
         registers.setr8(reg, (registers.getr8(reg) shr 1) or (registers.getr8(reg) shl 7))
+        registers.carry = (registers.a and 0x1u) == 0x1u.toUByte()
+    }
+
+    /**
+     * Name: RL r8
+     * Description: Rotate Left for register [reg]
+     * Sets [reg] to ([reg] shl 1) or c
+     * If bit 0 is set, set carry.  Otherwise reset.  All other flags are reset
+     */
+    fun rl(reg: Register) {
+        registers.setr8(reg, (registers.getr8(reg) shl 1) or registers.carry.toByte().toUByte())
+        registers.f.clear()
+        registers.carry = (registers.a and 0x80u) == 0x80.toUByte()
+    }
+
+    /**
+     * Name: RR r8
+     * Description: Rotate Right for register [reg]
+     * Sets [reg] to ([reg] shr 1) or c
+     * If bit 0 is set, set carry.  Otherwise reset.  All other flags are reset
+     */
+    fun rr(reg: Register) {
+        registers.setr8(reg, (registers.getr8(reg) shr 1) or registers.carry.toByte().toUByte())
+        registers.f.clear()
+        registers.carry = (registers.a and 0x01u) == 0x01u.toUByte()
+    }
+
+
+    /**
+     * Name: CPL
+     * Description: One's Complement of [reg]
+     */
+    fun cpl(reg: Register) {
+        registers.setr8(reg,registers.getr8(reg).inv())
+        registers.addsub = true
+        registers.halfcarry = true
+    }
+
+
+    /**
+     * Name: JR
+     * Description: Jump r8 forward if [condition] is true
+     */
+    fun jr(condition: Condition) {
+        val value: UByte = readByte(registers.pc)
+        if(registers.checkCondition(condition)) {
+            registers.pc = (registers.pc + value).toUShort()
+        }
     }
 
     /**
@@ -297,7 +345,13 @@ class Cpu {
         if(ime) {
             status = State.Halt
         }
-
+    }
+    /**
+     * Name: STOP
+     * Description: Stops execution
+     */
+    fun stop() {
+        status = State.Stop
     }
 
     /**

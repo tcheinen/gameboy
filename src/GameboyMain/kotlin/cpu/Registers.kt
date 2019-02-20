@@ -167,6 +167,7 @@ class Registers(var a: UByte = 0u,
             Condition.NZ -> !zero
             Condition.C -> carry
             Condition.NC -> !carry
+            Condition.TRUE -> true
         }
     }
 }

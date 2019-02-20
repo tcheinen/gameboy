@@ -225,7 +225,7 @@ class Opcodes {
         op[0xC6] = Opcode("ADD A,u8", 2, 8) {cpu: Cpu -> cpu.add_a_r8(Register.u8)}
         op[0xC7] = Opcode("RST 00h", 1, 16) {cpu: Cpu -> }
         op[0xC8] = Opcode("RET Z", 1, 20) {cpu: Cpu -> cpu.retc(Condition.Z)}
-        op[0xC9] = Opcode("RET", 1, 16) {cpu: Cpu -> }
+        op[0xC9] = Opcode("RET", 1, 16) {cpu: Cpu -> cpu.ret(false)}
         op[0xCA] = Opcode("JP Z,u16", 3, 16) {cpu: Cpu -> cpu.jpc(Condition.Z)}
         op[0xCB] = Opcode("PREFIX CB", 1, 4) {cpu: Cpu -> }
         op[0xCC] = Opcode("CALL Z,u16", 3, 24) {cpu: Cpu -> cpu.call(Condition.Z)}
@@ -242,7 +242,7 @@ class Opcodes {
         op[0xD6] = Opcode("SUB A,u8", 2, 8) {cpu: Cpu -> cpu.sub_a_r8(Register.u8)}
         op[0xD7] = Opcode("RST 10h", 1, 16) {cpu: Cpu -> }
         op[0xD8] = Opcode("RET C", 1, 20) {cpu: Cpu -> cpu.retc(Condition.C)}
-        op[0xD9] = Opcode("RETI", 1, 16) {cpu: Cpu -> }
+        op[0xD9] = Opcode("RETI", 1, 16) {cpu: Cpu -> cpu.ret(true)}
         op[0xDA] = Opcode("JP C,u16", 3, 16) {cpu: Cpu -> cpu.jpc(Condition.C)}
         op[0xDB] = Opcode("UNUSED", 1, 0) {cpu: Cpu -> }
         op[0xDC] = Opcode("CALL C,u16", 3, 24) {cpu: Cpu -> cpu.call(Condition.C)}

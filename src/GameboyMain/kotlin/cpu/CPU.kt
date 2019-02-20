@@ -205,6 +205,17 @@ class Cpu {
     }
 
     /**
+     * Name: RET
+     * Description: Pop short from stack and then jump to it
+     * Interrupt if [reti] is true
+     */
+    fun ret(reti: Boolean) {
+        val addr: UShort = popShort()
+        ime = ime or reti
+        registers.pc = addr
+    }
+
+    /**
      * Name: LD (u16),SP
      * Description: Write SP into the address pointed to by 16-bit value pointed to by PC
      */

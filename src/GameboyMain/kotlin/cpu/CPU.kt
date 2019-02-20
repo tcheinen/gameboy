@@ -194,6 +194,17 @@ class Cpu {
     }
 
     /**
+     * Name: JP CC
+     * Description: Jump to r16 if [condition] is true
+     */
+    fun jpc(condition: Condition) {
+        val value: UShort = readShort(registers.pc)
+        if(registers.checkCondition(condition)) {
+            registers.pc = value
+        }
+    }
+
+    /**
      * Name: LD (u16),SP
      * Description: Write SP into the address pointed to by 16-bit value pointed to by PC
      */

@@ -410,6 +410,20 @@ class Cpu {
         status = State.Stop
     }
 
+
+    /**
+     * Name: CALL CC,n
+     * Description: Call addr at pc if [cond] is true
+     */
+    fun call(cond: Condition) {
+        val addr: UShort = readShort(registers.pc)
+        if(registers.checkCondition(cond)) {
+            val pc: UShort = registers.pc
+            pushShort(pc)
+            registers.pc = addr
+        }
+    }
+
     /**
      * Get an 8-bit value from register
      * Value will be the contents of an 8-bit register or a byte at the memory address stored in a 16-bit register

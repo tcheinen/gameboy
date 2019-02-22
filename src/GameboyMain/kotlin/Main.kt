@@ -1,5 +1,11 @@
 package com.teddyheinen.gameboy
 
-fun main(args : Array<String>) {
-    println("Hello, world!")
+import cpu.Cpu
+
+@ExperimentalUnsignedTypes
+fun main(args: Array<String>) {
+    val cpu: Cpu = Cpu()
+    while (true) {
+        cpu.tick()
+    }
 }

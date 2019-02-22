@@ -15,9 +15,17 @@ import shr
 class Cpu {
 
     private var registers: Registers = Registers()
-    private var mmu: MMU = MMU()
+    public var mmu: MMU = MMU()
     var status: State = State.Okay
     var ime: Boolean = false
+
+    fun tick() {
+        val code = readByteCycle().toInt()
+        val instruction = Opcodes.op[code]
+        instruction.operation(this)
+        println("${instruction.name} - ${code.toString(16)} - ${registers.pc}")
+    }
+
     /**
      * Name: LD r16, u16
      * Description: Set a 16 bit register to two bytes read from memory at the program counter
@@ -606,14 +614,6 @@ class Cpu {
     }
 
     /**
-     * Increase the program counter by [num]
-     */
-    fun increase_pc(num: Int) {
-        registers.pc = (registers.pc + num.toUInt()).toUShort()
-    }
-
-
-    /**
      * Read 8-bit value from memory at stack pointer and increment
      */
     fun popByte(): UByte {
@@ -651,27 +651,7 @@ class Cpu {
      * Write 8-bit [value] to the memory at address [address]
      */
     fun writeByte(address: UShort, value: UByte) {
-        increase_pc(4)
-        when (address.toInt()) {
-            in 0x0000..0x3FFF -> {
-            } // rom bank 0
-            in 0x4000..0x7FFF -> {
-            } // rom bank 1
-            in 0x8000..0x9FFF -> {
-            } // vram
-            in 0xA000..0xBFFF -> {
-            } // external ram
-            in 0xC000..0xCFFF -> {
-            } // wram 0
-            in 0xD000..0xDFFF -> {
-            } // wram 1
-            in 0xFE00..0xFE9F -> {
-            } // Sprite Table (OAM)
-            in 0xFF00..0xFF7F -> {
-            } // IO
-            in 0xFF80..0xFFFE -> {
-            } // HRAM
-        }
+        mmu[address.toShort()] = value
     }
 
     /**
@@ -679,29 +659,7 @@ class Cpu {
      * // TODO complete this
      */
     fun readByte(address: UShort): UByte {
-        increase_pc(4)
-        when (address.toInt()) {
-            in 0x0000..0x3FFF -> {
-                mmu.readRomBank0(address)
-            } // rom bank 0
-            in 0x4000..0x7FFF -> {
-            } // rom bank 1
-            in 0x8000..0x9FFF -> {
-            } // vram
-            in 0xA000..0xBFFF -> {
-            } // external ram
-            in 0xC000..0xCFFF -> {
-            } // wram 0
-            in 0xD000..0xDFFF -> {
-            } // wram 1
-            in 0xFE00..0xFE9F -> {
-            } // Sprite Table (OAM)
-            in 0xFF00..0xFF7F -> {
-            } // IO
-            in 0xFF80..0xFFFE -> {
-            } // HRAM
-        }
-        return 0u
+        return mmu[address.toShort()]
     }
 
     /**
@@ -717,5 +675,16 @@ class Cpu {
      */
     fun readShort(address: UShort): UShort {
         return readByte(address).combine(readByte(address))
+    }
+
+    fun readByteCycle(): UByte {
+        val value = readByte(registers.pc)
+        registers.pc++
+        return value
+    }
+
+    fun writeByteCycle(value: UByte) {
+        writeByte(registers.pc, value)
+        registers.pc--
     }
 }

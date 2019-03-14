@@ -3,10 +3,10 @@ package cpu
 import com.teddyheinen.MMU
 import combine
 import high
-import kotlinx.cinterop.toByte
 import low
 import shl
 import shr
+import toUByte
 
 /**
  * A Sharp LR35902 CPU emulator
@@ -167,7 +167,7 @@ class Cpu {
      * If bit 0 is set, set carry.  Otherwise reset.  All other flags are reset
      */
     fun rl(reg: Register) {
-        registers.setr8(reg, (registers.getr8(reg) shl 1) or registers.carry.toByte().toUByte())
+        registers.setr8(reg, (registers.getr8(reg) shl 1) or registers.carry.toUByte())
         registers.f.clear()
         registers.carry = (registers.a and 0x80u) == 0x80.toUByte()
     }
@@ -179,7 +179,7 @@ class Cpu {
      * If bit 0 is set, set carry.  Otherwise reset.  All other flags are reset
      */
     fun rr(reg: Register) {
-        registers.setr8(reg, (registers.getr8(reg) shr 1) or registers.carry.toByte().toUByte())
+        registers.setr8(reg, (registers.getr8(reg) shr 1) or registers.carry.toUByte())
         registers.f.clear()
         registers.carry = (registers.a and 0x01u) == 0x01u.toUByte()
     }

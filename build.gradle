@@ -1,54 +1,30 @@
-buildscript {
-    repositories {
-        jcenter()
-    }
-
-    dependencies {
-        classpath "org.jetbrains.dokka:dokka-gradle-plugin:0.9.14"
-    }
-}
-
 plugins {
-    id 'kotlin-multiplatform' version '1.3.20'
+    id 'org.jetbrains.kotlin.jvm' version '1.3.21'
+    id 'application'
 }
 
-apply plugin: 'org.jetbrains.dokka'
+group 'com.teddyheinen'
+version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
 }
 
-kotlin {
-    targets {
-        // For ARM, preset should be changed to presets.iosArm32 or presets.iosArm64
-        // For Linux, preset should be changed to e.g. presets.linuxX64
-        // For MacOS, preset should be changed to e.g. presets.macosX64
-        fromPreset(presets.mingwX64, 'Gameboy')
-        configure([Gameboy]) {
-            compilations.main.outputKinds = [EXECUTABLE]
-            compilations.main.entryPoint 'com.teddyheinen.gameboy.main' 
-        }
-    }
-
-    sourceSets {
-        GameboyMain {
-        }
-        GameboyTest {
-        }
-    }
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 }
 
-dokka {
-    outputFormat = 'html'
-    outputDirectory = "$buildDir/javadoc"
+
+
+application {
+    mainClassName = 'com.teddyheinen.MainKt'
 }
 
-task runProgram {
-    def buildType = 'RELEASE' // Change to 'DEBUG' to run application with debug symbols.
-    dependsOn kotlin.targets.Gameboy.compilations.main.linkTaskName('EXECUTABLE', buildType)
-    doLast {
-        exec {
-            executable kotlin.targets.Gameboy.compilations.main.getBinary('EXECUTABLE', buildType)
-        }
-    }
+
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
 }

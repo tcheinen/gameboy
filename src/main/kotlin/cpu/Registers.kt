@@ -5,6 +5,7 @@ import byte
 import combine
 import high
 import low
+import java.util.*
 
 /**
  * Stores the CPU Registers with convenience methods for accessing them as 16 bit

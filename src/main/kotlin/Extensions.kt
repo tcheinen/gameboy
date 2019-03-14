@@ -1,3 +1,5 @@
+import java.util.*
+
 infix fun UShort.shr(i: Int): UShort = (this.toInt() shr i).toUShort()
 infix fun UShort.shl(i: Int): UShort = (this.toInt() shl i).toUShort()
 
@@ -8,11 +10,11 @@ infix fun UByte.combine(i: UByte): UShort = ((this.toInt() shl 8) or i.toInt()).
 val UShort.high: UByte get() = (this shr 8).toUByte()
 val UShort.low: UByte get() = (this and 0xFFu).toUByte()
 
-
+fun Boolean.toUByte(): UByte = if(this) 1u else 0u
 // TODO make sure this works
 val BitSet.byte: UByte get() {
     var out: UByte = 0u
-    for(i in this.size..0) {
+    for(i in this.size()..0) {
         out shl 1
         if(this[i]) out++
     }

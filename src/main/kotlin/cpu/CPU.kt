@@ -7,6 +7,7 @@ import low
 import shl
 import shr
 import toUByte
+import java.lang.Exception
 
 /**
  * A Sharp LR35902 CPU emulator
@@ -24,6 +25,8 @@ class Cpu {
         val instruction = Opcodes.op[code]
         instruction.operation(this)
         println("${instruction.name} - ${code.toString(16)} - ${registers.pc}")
+//        registers.pc = (registers.pc + instruction.length.toUInt()).toUShort()
+
     }
 
     /**
@@ -31,7 +34,7 @@ class Cpu {
      * Description: Set a 16 bit register to two bytes read from memory at the program counter
      */
     fun ld_r16_u16(reg: Register) {
-        val value: UShort = readShort(registers.pc)
+        val value: UShort = readShortCycle()
         when (reg) {
             Register.SP -> registers.sp = value
             Register.PC -> registers.pc = value
@@ -184,6 +187,90 @@ class Cpu {
         registers.carry = (registers.a and 0x01u) == 0x01u.toUByte()
     }
 
+    /**
+     * Name: SLA
+     * Description: Left shift [reg] by one
+     */
+    fun sla(reg: Register) {
+        val result: UByte = registers.getr8(reg) shl 1
+
+        registers.zero = result.toUInt() == 0u
+        registers.addsub = false
+        registers.halfcarry = false
+        registers.carry = (registers.getr8(reg) and 0x80u).toUInt() == 0x80u
+
+        registers.setr8(reg, result)
+    }
+
+    /**
+     * Name: SRA
+     * Description: Right shift [reg] by one and AND with 0x80
+     */
+    fun sra(reg: Register) {
+        val result: UByte = (registers.getr8(reg) shr 1) and 0x80u
+
+        registers.zero = result.toUInt() == 0u
+        registers.addsub = false
+        registers.halfcarry = false
+        registers.carry = (registers.getr8(reg) and 0x01u).toUInt() == 0x01u
+
+        registers.setr8(reg, result)
+    }
+
+    /**
+     * Name: SWAP
+     * Description: Swap upper and lower parts of [reg] by one
+     */
+    fun swap(reg: Register) {
+        val source = registers.getr8(reg)
+        registers.setr8(reg, source.low or source.high)
+        registers.carry = false
+        registers.halfcarry = false
+        registers.addsub = false
+        registers.zero = source.toUInt() == 0u
+    }
+
+    /**
+     * Name: SRL
+     * Description: Right shift [reg] by one
+     */
+    fun srl(reg: Register) {
+        val result: UByte = registers.getr8(reg) shr 1
+
+        registers.zero = result.toUInt() == 0u
+        registers.addsub = false
+        registers.halfcarry = false
+        registers.carry = (registers.getr8(reg) and 0x01u).toUInt() == 0x01u
+
+        registers.setr8(reg, result)
+    }
+
+    /**
+     * Name: BIT
+     * Description: Test [reg] after masking with [mask]
+     */
+    fun bit(reg: Register, mask: UByte) {
+        registers.addsub = false
+        registers.halfcarry = true
+        val t = (registers.getr8(reg) and mask) == (-128).toUByte()
+        registers.zero = t
+    }
+
+    /**
+     * Name: RES
+     * Description: AND [reg] with negation of provided mask
+     */
+    fun res(reg: Register, mask: UByte) {
+        registers.setr8(reg, registers.getr8(reg) and mask.inv())
+    }
+
+    /**
+     * Name: SET
+     * Description: OR [reg] with provided mask
+     */
+    fun set(reg: Register, mask: UByte) {
+        registers.setr8(reg, registers.getr8(reg) or mask)
+    }
 
     /**
      * Name: CPL
@@ -614,6 +701,44 @@ class Cpu {
     }
 
     /**
+     * Name: PREFIX CB
+     * Description: Read byte and execute appropriate CB instruction
+     */
+    fun cb() {
+        val code: UByte = readByteCycle()
+        val reg: Register = when((code and 7u).toUInt()) {
+            0u -> Register.B
+            1u -> Register.C
+            2u -> Register.D
+            3u -> Register.E
+            4u -> Register.H
+            5u -> Register.L
+            6u -> Register.HL
+            7u -> Register.A
+            else -> throw Exception("CB reg code returned an impossible value")
+        }
+        when ((code shr 6).toUInt()) {
+            0x0u -> when((code shr 3).toUInt()) {
+                0x0u -> {rlc(reg)}
+                0x1u -> {rrc(reg)}
+                0x2u -> {rl(reg)}
+                0x3u -> {rr(reg)}
+                0x4u -> {sla(reg)}
+                0x5u -> {sra(reg)}
+                0x6u -> {swap(reg)}
+                0x7u -> {srl(reg)}
+            }
+            0x1u -> {bit(reg, (1u shl ((code shr 3).toInt() and 7)).toUByte())}
+            0x2u -> {res(reg, (1u shl ((code shr 3).toInt() and 7)).toUByte())}
+            0x3u -> {set(reg, (1u shl ((code shr 3).toInt() and 7)).toUByte())}
+        }
+    }
+
+    /**
+     *
+     */
+
+    /**
      * Read 8-bit value from memory at stack pointer and increment
      */
     fun popByte(): UByte {
@@ -677,12 +802,34 @@ class Cpu {
         return readByte(address).combine(readByte(address))
     }
 
+    /**
+     * Read 16-bit value from memory and increment PC
+     */
+    fun readShortCycle(): UShort {
+        return readByteCycle().combine(readByteCycle())
+    }
+
+    /**
+     * Write 16-bit value to memory at PC and decrement PC
+     */
+    fun writeShortCycle(value: UShort) {
+        writeByteCycle(value.high)
+        writeByteCycle(value.low)
+    }
+
+    /**
+     * Read 8-bit value from memory and increment PC
+     */
     fun readByteCycle(): UByte {
         val value = readByte(registers.pc)
         registers.pc++
         return value
     }
 
+
+    /**
+     * Write 8-bit value to memory at PC and decrement PC
+     */
     fun writeByteCycle(value: UByte) {
         writeByte(registers.pc, value)
         registers.pc--

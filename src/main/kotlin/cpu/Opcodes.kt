@@ -225,7 +225,7 @@ class Opcodes {
             op[0xC8] = Opcode("RET Z", 1, 20) { cpu: Cpu -> cpu.retc(Condition.Z) }
             op[0xC9] = Opcode("RET", 1, 16) { cpu: Cpu -> cpu.ret(false) }
             op[0xCA] = Opcode("JP Z,u16", 3, 16) { cpu: Cpu -> cpu.jpc(Condition.Z) }
-            op[0xCB] = Opcode("PREFIX CB", 1, 4) { cpu: Cpu -> }
+            op[0xCB] = Opcode("PREFIX CB", 1, 4) { cpu: Cpu -> cpu.cb()}
             op[0xCC] = Opcode("CALL Z,u16", 3, 24) { cpu: Cpu -> cpu.call(Condition.Z) }
             op[0xCD] = Opcode("CALL u16", 3, 24) { cpu: Cpu -> cpu.call(Condition.TRUE) }
             op[0xCE] = Opcode("ADC A,u8", 2, 8) { cpu: Cpu -> cpu.addc_a_r8(Register.u8) }

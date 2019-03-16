@@ -7,6 +7,9 @@ infix fun UByte.shr(i: Int): UByte = (this.toInt() shr i).toUByte()
 infix fun UByte.shl(i: Int): UByte = (this.toInt() shl i).toUByte()
 infix fun UByte.combine(i: UByte): UShort = ((this.toInt() shl 8) or i.toInt()).toUShort()
 
+val UByte.high: UByte get() = (this shr 4).toUByte()
+val UByte.low: UByte get() = (this and 0xFu).toUByte()
+
 val UShort.high: UByte get() = (this shr 8).toUByte()
 val UShort.low: UByte get() = (this and 0xFFu).toUByte()
 

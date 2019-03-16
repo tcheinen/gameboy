@@ -83,7 +83,7 @@ class Registers(var a: UByte = 0u,
             Register.E -> e
             Register.H -> h
             Register.L -> l
-            else -> 0u
+            else -> throw Exception("Tried to get 16 bit reg with getr8")
         }
     }
 
@@ -99,8 +99,7 @@ class Registers(var a: UByte = 0u,
             Register.E -> e = value
             Register.H -> h = value
             Register.L -> l = value
-            else -> {
-            }
+            else -> throw Exception("Tried to set 16 bit reg with getr8")
         }
     }
 
@@ -115,7 +114,7 @@ class Registers(var a: UByte = 0u,
             Register.BC -> bc
             Register.DE -> de
             Register.HL -> hl
-            else -> 0u
+            else -> throw Exception("Tried to get 8 bit reg with getr16")
         }
     }
 
@@ -130,8 +129,7 @@ class Registers(var a: UByte = 0u,
             Register.BC -> bc = value
             Register.DE -> de = value
             Register.HL -> hl = value
-            else -> {
-            }
+            else -> throw Exception("Tried to set 8 bit reg with getr16")
         }
     }
 

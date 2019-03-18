@@ -10,7 +10,9 @@ class Opcodes {
         val op: ArrayList<Opcode> = opcodes()
         fun opcodes(): ArrayList<Opcode> {
             val op: ArrayList<Opcode> = ArrayList<Opcode>(0xFF)
-            for(i in 0x0..0xFF) { op.add(Opcode("NOP", 1, 4) { cpu: Cpu -> }) }
+            for (i in 0x0..0xFF) {
+                op.add(Opcode("NOP", 1, 4) { cpu: Cpu -> })
+            }
             op[0x1] = Opcode("LD BC,u16", 3, 12) { cpu: Cpu -> cpu.ld_r16_u16(Register.BC) }
             op[0x2] = Opcode("LD (BC),A", 1, 8) { cpu: Cpu -> cpu.ld_r16_r8(Register.BC, Register.A) }
             op[0x3] = Opcode("INC BC", 1, 8) { cpu: Cpu -> cpu.inc_r16(Register.BC) }
@@ -46,7 +48,12 @@ class Opcodes {
 
             op[0x20] = Opcode("JR NZ,i8", 2, 12) { cpu: Cpu -> cpu.jr(Condition.NZ) }
             op[0x21] = Opcode("LD HL,u16", 3, 12) { cpu: Cpu -> cpu.ld_r16_u16(Register.HL) }
-            op[0x22] = Opcode("LD (HL+),A", 1, 8) { cpu: Cpu -> cpu.ld_r16_r8(Register.HL, Register.A) } // TODO figure out what the + means
+            op[0x22] = Opcode("LD (HL+),A", 1, 8) { cpu: Cpu ->
+                cpu.ld_r16_r8(
+                    Register.HL,
+                    Register.A
+                )
+            } // TODO figure out what the + means
             op[0x23] = Opcode("INC HL", 1, 8) { cpu: Cpu -> cpu.inc_r16(Register.HL) }
             op[0x24] = Opcode("INC H", 1, 4) { cpu: Cpu -> cpu.inc_r8(Register.H) }
             op[0x25] = Opcode("DEC H", 1, 4) { cpu: Cpu -> cpu.dec_r8(Register.H) }
@@ -63,7 +70,10 @@ class Opcodes {
 
             op[0x30] = Opcode("JR NC,i8", 2, 12) { cpu: Cpu -> cpu.jr(Condition.NC) }
             op[0x31] = Opcode("LD SP,u16", 3, 12) { cpu: Cpu -> cpu.ld_r16_u16(Register.SP) }
-            op[0x32] = Opcode("LD (HL-),A", 1, 8) { cpu: Cpu -> cpu.ld_r16_r8(Register.SP, Register.A) }
+            op[0x32] = Opcode("LD (HL-),A", 1, 8) { cpu: Cpu ->
+                cpu.ld_r16_r8(Register.SP, Register.A)
+                cpu.dec_r16(Register.HL)
+            }
             op[0x33] = Opcode("INC SP", 1, 8) { cpu: Cpu -> cpu.inc_r16(Register.SP) }
             op[0x34] = Opcode("INC (HL)", 1, 12) { cpu: Cpu -> cpu.inc_r8(Register.HL) }
             op[0x35] = Opcode("DEC (HL)", 1, 12) { cpu: Cpu -> cpu.dec_r8(Register.HL) }
@@ -225,7 +235,7 @@ class Opcodes {
             op[0xC8] = Opcode("RET Z", 1, 20) { cpu: Cpu -> cpu.retc(Condition.Z) }
             op[0xC9] = Opcode("RET", 1, 16) { cpu: Cpu -> cpu.ret(false) }
             op[0xCA] = Opcode("JP Z,u16", 3, 16) { cpu: Cpu -> cpu.jpc(Condition.Z) }
-            op[0xCB] = Opcode("PREFIX CB", 1, 4) { cpu: Cpu -> cpu.cb()}
+            op[0xCB] = Opcode("PREFIX CB", 1, 4) { cpu: Cpu -> cpu.cb() }
             op[0xCC] = Opcode("CALL Z,u16", 3, 24) { cpu: Cpu -> cpu.call(Condition.Z) }
             op[0xCD] = Opcode("CALL u16", 3, 24) { cpu: Cpu -> cpu.call(Condition.TRUE) }
             op[0xCE] = Opcode("ADC A,u8", 2, 8) { cpu: Cpu -> cpu.addc_a_r8(Register.u8) }

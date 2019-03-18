@@ -1,5 +1,6 @@
 package cpu
 
+import adjustedUbyte
 import com.teddyheinen.MMU
 import combine
 import high
@@ -19,7 +20,6 @@ class Cpu {
     public var mmu: MMU = MMU()
     var status: State = State.Okay
     var ime: Boolean = false
-
     fun tick() {
         val code = readByteCycle().toInt()
         val instruction = Opcodes.op[code]
@@ -62,7 +62,6 @@ class Cpu {
             }
             Register.SP -> {
                 registers.hl
-                registers.hl--
             }
             else -> 0u // should never happen
         }
@@ -116,7 +115,10 @@ class Cpu {
      * Description: Decrement 16-bit register [reg]
      */
     fun dec_r16(reg: Register) {
-        registers.setr16(reg, (registers.getr16(reg) - 1u).toUShort())
+        val t1 = registers.getr16(reg)
+        val t2 = t1 - 1u
+        val t3 = t2.toUShort()
+        registers.setr16(reg, t3)
     }
 
     /**
@@ -252,7 +254,10 @@ class Cpu {
     fun bit(reg: Register, mask: UByte) {
         registers.addsub = false
         registers.halfcarry = true
-        val t = (registers.getr8(reg) and mask) == (-128).toUByte()
+        val h = registers.getr8(reg)
+        val l = registers.getr8(Register.L)
+        val t1 = registers.getr8(reg) and mask
+        val t = t1 == (-128).toUByte()
         registers.zero = t
     }
 
@@ -288,9 +293,9 @@ class Cpu {
      * Description: Jump r8 forward if [condition] is true
      */
     fun jr(condition: Condition) {
-        val value: UByte = readByte(registers.pc)
+        val value: Byte = readByteCycle().toByte()
         if (registers.checkCondition(condition)) {
-            registers.pc = (registers.pc + value).toUShort()
+            registers.pc = (registers.pc.toShort() + value).toUShort()
         }
     }
 
@@ -717,6 +722,7 @@ class Cpu {
             7u -> Register.A
             else -> throw Exception("CB reg code returned an impossible value")
         }
+        val mask = ((1u shl ((code shr 3).toInt() and 7))).toInt().adjustedUbyte()
         when ((code shr 6).toUInt()) {
             0x0u -> when((code shr 3).toUInt()) {
                 0x0u -> {rlc(reg)}
@@ -728,9 +734,9 @@ class Cpu {
                 0x6u -> {swap(reg)}
                 0x7u -> {srl(reg)}
             }
-            0x1u -> {bit(reg, (1u shl ((code shr 3).toInt() and 7)).toUByte())}
-            0x2u -> {res(reg, (1u shl ((code shr 3).toInt() and 7)).toUByte())}
-            0x3u -> {set(reg, (1u shl ((code shr 3).toInt() and 7)).toUByte())}
+            0x1u -> {bit(reg, mask.toUByte())}
+            0x2u -> {res(reg, mask.toUByte())}
+            0x3u -> {set(reg, mask.toUByte())}
         }
     }
 

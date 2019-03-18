@@ -29,27 +29,27 @@ class Registers(var a: UByte = 0u,
     }
 
     var af: UShort
-        get() = a.combine(f.byte)
+        get() = f.byte.combine(a)
         set(num) {
             a = num.high
             f = num.low.bitset
         }
     var bc: UShort
-        get() = b.combine(c)
+        get() = c.combine(b)
         set(num) {
             b = num.high
             c = num.low
         }
 
     var de: UShort
-        get() = d.combine(e)
+        get() = e.combine(d)
         set(num) {
             d = num.high
             e = num.low
         }
 
     var hl: UShort
-        get() = h.combine(l)
+        get() = l.combine(h)
         set(num) {
             h = num.high
             l = num.low

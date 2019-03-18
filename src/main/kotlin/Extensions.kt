@@ -5,10 +5,13 @@ infix fun UShort.shl(i: Int): UShort = (this.toInt() shl i).toUShort()
 
 infix fun UByte.shr(i: Int): UByte = (this.toInt() shr i).toUByte()
 infix fun UByte.shl(i: Int): UByte = (this.toInt() shl i).toUByte()
-infix fun UByte.combine(i: UByte): UShort = ((this.toInt() shl 8) or i.toInt()).toUShort()
+infix fun UByte.combine(i: UByte): UShort = ((i.toInt() shl 8) or this.toInt()).toUShort()
 
 val UByte.high: UByte get() = (this shr 4).toUByte()
 val UByte.low: UByte get() = (this and 0xFu).toUByte()
+
+fun Int.adjustedUbyte(): UByte = ((minOf(this,127))).toUByte()
+
 
 val UShort.high: UByte get() = (this shr 8).toUByte()
 val UShort.low: UByte get() = (this and 0xFFu).toUByte()

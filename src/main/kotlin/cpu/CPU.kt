@@ -20,10 +20,16 @@ class Cpu {
     public var mmu: MMU = MMU()
     var status: State = State.Okay
     var ime: Boolean = false
+    var counter = 0
     fun tick() {
         val code = readByteCycle().toInt()
         val instruction = Opcodes.op[code]
         instruction.operation(this)
+        if(instruction.name.equals("NOP")) {
+            print("")
+        }
+        if(instruction.name.equals("JR NZ,i8"))
+            counter++
         println("${instruction.name} - ${code.toString(16)} - ${registers.pc}")
 //        registers.pc = (registers.pc + instruction.length.toUInt()).toUShort()
 
@@ -126,7 +132,11 @@ class Cpu {
      * Description: Decrement 16-bit register [reg]
      */
     fun dec_r8(reg: Register) {
-        registers.setr8(reg, (registers.getr8(reg) - 1u).toUByte())
+        val result = registers.getr8(reg).toInt() - 1
+        registers.setr8(reg, result.toUByte())
+        registers.zero = result == 1
+        registers.addsub = true
+        registers.halfcarry = result and 0xF == 0
     }
 
     /**
@@ -134,7 +144,7 @@ class Cpu {
      * Description: Set an 8 bit register to a bytes read from memory at the program counter
      */
     fun ld_r8_u8(reg: Register) {
-        val value: UByte = readByte(registers.pc)
+        val value: UByte = readByteCycle()
         when (reg) {
             Register.HL -> writeByte(registers.hl, value)
             else -> registers.setr8(reg, value)
@@ -257,7 +267,7 @@ class Cpu {
         val h = registers.getr8(reg)
         val l = registers.getr8(Register.L)
         val t1 = registers.getr8(reg) and mask
-        val t = t1 == (-128).toUByte()
+        val t = t1 == 0.toUByte()
         registers.zero = t
     }
 
@@ -376,7 +386,7 @@ class Cpu {
      * Description: Write [reg] to FF00 + u8
      */
     fun ldh_u8_r8(reg: Register) {
-        val address: UShort = (0xFF00u or readByte(registers.pc).toUInt()).toUShort()
+        val address: UShort = (0xFF00u or readByteCycle().toUInt()).toUShort()
         writeByte(address, registers.getr8(reg))
     }
 
@@ -646,7 +656,7 @@ class Cpu {
      * Description: Call addr at pc if [cond] is true
      */
     fun call(cond: Condition) {
-        val addr: UShort = readShort(registers.pc)
+        val addr: UShort = readShortCycle()
         if (registers.checkCondition(cond)) {
             val pc: UShort = registers.pc
             pushShort(pc)

@@ -34,7 +34,7 @@ data class MMU(val rom0: UByteArray = UByteArray(16384),
 
     }
     //TODO implement external ram and IO
-    operator fun get(address: Short): UByte {
+    operator fun get(address: Int): UByte {
         return when (address) {
             in 0x0000..0x3FFF -> {
                 rom0[address-0x0000]
@@ -66,7 +66,7 @@ data class MMU(val rom0: UByteArray = UByteArray(16384),
             else -> 0u
         }
     }
-    operator fun set(address: Short, value: UByte) {
+    operator fun set(address: Int, value: UByte) {
         when (address) {
             in 0x0000..0x3FFF -> {
                 rom0[address-0x0000] = value

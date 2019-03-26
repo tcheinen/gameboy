@@ -132,11 +132,11 @@ class Cpu {
      * Description: Decrement 16-bit register [reg]
      */
     fun dec_r8(reg: Register) {
-        val result = registers.getr8(reg).toInt() - 1
-        registers.setr8(reg, result.toUByte())
-        registers.zero = result == 1
+        val r = registers.getr8(reg).dec()
+        registers.setr8(reg, r)
+        registers.zero = r and 0xffu == 1u.toUByte()
         registers.addsub = true
-        registers.halfcarry = result and 0xF == 0
+        registers.halfcarry = r and 0xFu == 0u.toUByte()
     }
 
     /**
@@ -792,7 +792,7 @@ class Cpu {
      * Write 8-bit [value] to the memory at address [address]
      */
     fun writeByte(address: UShort, value: UByte) {
-        mmu[address.toShort()] = value
+        mmu[address.toString().toInt()] = value
     }
 
     /**
@@ -800,7 +800,7 @@ class Cpu {
      * // TODO complete this
      */
     fun readByte(address: UShort): UByte {
-        return mmu[address.toShort()]
+        return mmu[address.toString().toInt()]
     }
 
     /**

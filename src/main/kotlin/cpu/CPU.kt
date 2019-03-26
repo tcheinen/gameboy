@@ -404,7 +404,7 @@ class Cpu {
      * Description: Write FF00 + u8 to [reg]
      */
     fun ldh_r8_u8(reg: Register) {
-        val address: UShort = (0xFF00u or readByte(registers.pc).toUInt()).toUShort()
+        val address: UShort = (0xFF00u or readByteCycle().toUInt()).toUShort()
         registers.setr8(reg, readByte(address))
     }
 
@@ -595,7 +595,7 @@ class Cpu {
      * Description: Subtract [reg] from A and discard result
      */
     fun cp_a_r8(reg: Register) {
-        val src = get_u8_register(reg)
+        val src = if(reg == Register.u8) readByteCycle() else get_u8_register(reg)
         val a = registers.a
         registers.addsub = true
         registers.carry = a < src

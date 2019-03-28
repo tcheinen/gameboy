@@ -494,7 +494,7 @@ class Cpu {
      * Description: Add byte from PC location to SP
      */
     fun add_sp_u8() {
-        val src = readByte(registers.pc)
+        val src = readByteCycle()
         val result = (registers.a + src).toUShort()
         registers.addsub = false
         registers.zero = false
@@ -679,7 +679,7 @@ class Cpu {
             Register.L -> registers.l
             Register.HL -> readByte(registers.hl)
             Register.PC -> readByte(registers.pc)
-            Register.u8 -> readByte(registers.pc)
+            Register.u8 -> readByteCycle()
             else -> 0u // should not happen
         }
 
@@ -690,7 +690,7 @@ class Cpu {
      * Description: Loads SP + byte from memory at pc into HL
      */
     fun ld_hl_sp() {
-        val n: UByte = readByte(registers.pc)
+        val n: UByte = readByteCycle()
         val result: UShort = (registers.sp + n).toUShort()
         registers.f.clear()
         registers.halfcarry = (registers.sp and 0x0Fu) + (n and 0x0Fu) > 0x0Fu
